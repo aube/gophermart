@@ -1,24 +1,25 @@
 -- +goose Up
 -- +goose StatementBegin
-CREATE TABLE users (
-    id serial not null primary key,
-    uuid uuid DEFAULT gen_random_uuid() not null unique,
-    email varchar not null unique,
-    encrypted_password varchar not null,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+CREATE TYPE order_status AS ENUM ('NEW', 'PROCESSING', 'INVALID', 'PROCESSED');
+
+CREATE TABLE orders (
+    id bigint not null primary key,
+    order_id bigint not null,
+    user_id serial not null,
+    loyalty_points bigint not null check (loyalty_points >= 0) default 0,
+    status order_status NOT NULL DEFAULT 'NEW'
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted boolean not null default false
 );
 
-create INDEX idx_uuid on users (uuid);
-
-create INDEX idx_email on users (email);
-
-create INDEX idx_encrypted_password on users (encrypted_password);
+create INDEX order_id on orders (order_id);
+create INDEX user_id on orders (user_id);
 
 
-CREATE TRIGGER users_updated_at_trigger
-BEFORE UPDATE ON users
+CREATE TRIGGER orders_updated_at_trigger
+BEFORE UPDATE ON orders
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at();
 
@@ -27,12 +28,11 @@ EXECUTE FUNCTION update_updated_at();
 -- +goose Down
 -- +goose StatementBegin
 
-DROP TRIGGER users_updated_at_trigger ON users;
+DROP TRIGGER orders_updated_at_trigger ON orders;
 
-drop INDEX idx_encrypted_password;
-drop INDEX idx_email;
-drop INDEX idx_uuid;
+drop INDEX order_id;
+drop INDEX user_id;
 
-DROP TABLE users;
+DROP TABLE orders;
 
 -- +goose StatementEnd
