@@ -30,15 +30,17 @@ func (r *UserRepository) Register(ctx context.Context, u *model.User) error {
 }
 
 // Login ...
-func (r *UserRepository) Login(ctx context.Context, email string) (*model.User, error) {
-	u := &model.User{}
+func (r *UserRepository) Login(ctx context.Context, u *model.User) (*model.User, error) {
+	if err := u.Validate(); err != nil {
+		return nil, err
+	}
+
 	if err := r.db.QueryRow(
-		"SELECT id, email, encrypted_password FROM users WHERE email = $1",
-		email,
+		"SELECT id, email FROM users WHERE email = $1 and encrypted_password = $2",
+		u.Email,
+		u.EncryptedPassword,
 	).Scan(
 		&u.ID,
-		&u.Email,
-		&u.EncryptedPassword,
 	); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errRecordNotFound
