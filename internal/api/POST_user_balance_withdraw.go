@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-func (*Server) SendUserBalanceWithdraw(w http.ResponseWriter, r *http.Request) {
+func (*Server) UserBalanceWithdraw(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 

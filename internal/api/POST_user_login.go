@@ -7,7 +7,7 @@ import (
 	"github.com/aube/gophermart/internal/model"
 )
 
-func (s *Server) SendUserLogin(w http.ResponseWriter, r *http.Request) {
+func (s *Server) UserLogin(w http.ResponseWriter, r *http.Request) {
 	httpStatus := http.StatusCreated
 
 	ctx := r.Context()
@@ -34,7 +34,7 @@ func (s *Server) SendUserLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Store
-	err = s.store.User().Create(ctx, &user)
+	err = s.store.User.Register(ctx, &user)
 	if err != nil {
 		s.logger.ErrorContext(ctx, "HandlerCreateUser", "err", err)
 		httpStatus = http.StatusConflict

@@ -9,7 +9,7 @@ import (
 	"github.com/kelseyhightower/envconfig"
 )
 
-var configPath = "configs/.env.auth"
+var configPath = "configs/.env.gophermart"
 
 type envConfig struct {
 	ServerAddress         string `envconfig:"SERVER_ADDRESS" default:"localhost:8080"`

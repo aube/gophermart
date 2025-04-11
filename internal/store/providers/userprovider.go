@@ -7,7 +7,11 @@ import (
 )
 
 type UserRepositoryProvider interface {
-	Create(context.Context, *model.User) error
-	Find(context.Context, int) (*model.User, error)
-	FindByEmail(context.Context, string) (*model.User, error)
+	Register(context.Context, *model.User) error
+	Login(context.Context, string) (*model.User, error)
+	Orders(context.Context, string) (*model.User, error)
+	Balance(context.Context, string) (*model.User, error)
+	UploadOrders(context.Context, string) (*model.User, error)
+	BalanceWithdraw(context.Context, string) (*model.User, error)
+	Withdrawals(context.Context, string) (*model.User, error)
 }

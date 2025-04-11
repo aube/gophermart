@@ -32,5 +32,5 @@ func (s *Server) configureRouter() {
 	s.router.HandleFunc(`GET /user/balance`, http.HandlerFunc(s.UserBalance))
 	s.router.HandleFunc(`GET /user/orders`, http.HandlerFunc(s.UserOrders))
 	s.router.HandleFunc(`GET /user/withdrawals`, http.HandlerFunc(s.UserWithdrawals))
-	s.router.HandleFunc(`POST /user/balance/withdraw`, http.HandlerFunc(s.SendUserBalanceWithdraw))
+	s.router.HandleFunc(`POST /user/balance/withdraw`, http.HandlerFunc(s.UserBalanceWithdraw))
 }
