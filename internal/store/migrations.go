@@ -21,5 +21,4 @@ func runPostgresMigrations(db *sql.DB) {
 	if err := goose.Up(db, "postgres/migrations"); err != nil {
 		panic(err)
 	}
-
 }

@@ -7,13 +7,13 @@ import (
 	"github.com/aube/gophermart/internal/model"
 )
 
-// User ...
+// UserRepository ...
 type UserRepository struct {
 	db *sql.DB
 }
 
-// Create ...
-func (r *UserRepository) Create(ctx context.Context, u *model.User) error {
+// Register ...
+func (r *UserRepository) Register(ctx context.Context, u *model.User) error {
 	if err := u.Validate(); err != nil {
 		return err
 	}
@@ -29,12 +29,12 @@ func (r *UserRepository) Create(ctx context.Context, u *model.User) error {
 	).Scan(&u.ID)
 }
 
-// Find ...
-func (r *UserRepository) Find(ctx context.Context, id int) (*model.User, error) {
+// Login ...
+func (r *UserRepository) Login(ctx context.Context, email string) (*model.User, error) {
 	u := &model.User{}
 	if err := r.db.QueryRow(
-		"SELECT id, email, encrypted_password FROM users WHERE id = $1",
-		id,
+		"SELECT id, email, encrypted_password FROM users WHERE email = $1",
+		email,
 	).Scan(
 		&u.ID,
 		&u.Email,
@@ -50,11 +50,95 @@ func (r *UserRepository) Find(ctx context.Context, id int) (*model.User, error) 
 	return u, nil
 }
 
-// FindByEmail ...
-func (r *UserRepository) FindByEmail(ctx context.Context, email string) (*model.User, error) {
+// Orders ...
+func (r *UserRepository) Orders(ctx context.Context, email string) (*model.User, error) {
 	u := &model.User{}
 	if err := r.db.QueryRow(
-		"SELECT id, email, encrypted_password FROM users WHERE email = $1",
+		"SELECT * FROM orders WHERE user_id = $1",
+		email,
+	).Scan(
+		&u.ID,
+		&u.Email,
+		&u.EncryptedPassword,
+	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errRecordNotFound
+		}
+
+		return nil, err
+	}
+
+	return u, nil
+}
+
+// Orders ...
+func (r *UserRepository) Balance(ctx context.Context, email string) (*model.User, error) {
+	u := &model.User{}
+	if err := r.db.QueryRow(
+		"SELECT * FROM orders WHERE user_id = $1",
+		email,
+	).Scan(
+		&u.ID,
+		&u.Email,
+		&u.EncryptedPassword,
+	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errRecordNotFound
+		}
+
+		return nil, err
+	}
+
+	return u, nil
+}
+
+// UploadOrders ...
+func (r *UserRepository) UploadOrders(ctx context.Context, email string) (*model.User, error) {
+	u := &model.User{}
+	if err := r.db.QueryRow(
+		"SELECT * FROM orders WHERE user_id = $1",
+		email,
+	).Scan(
+		&u.ID,
+		&u.Email,
+		&u.EncryptedPassword,
+	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errRecordNotFound
+		}
+
+		return nil, err
+	}
+
+	return u, nil
+}
+
+// BalanceWithdraw ...
+func (r *UserRepository) BalanceWithdraw(ctx context.Context, email string) (*model.User, error) {
+	u := &model.User{}
+	if err := r.db.QueryRow(
+		"SELECT * FROM orders WHERE user_id = $1",
+		email,
+	).Scan(
+		&u.ID,
+		&u.Email,
+		&u.EncryptedPassword,
+	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, errRecordNotFound
+		}
+
+		return nil, err
+	}
+
+	return u, nil
+}
+
+// Withdrawals ...
+func (r *UserRepository) Withdrawals(ctx context.Context, email string) (*model.User, error) {
+	u := &model.User{}
+	if err := r.db.QueryRow(
+		"SELECT * FROM orders WHERE user_id = $1",
 		email,
 	).Scan(
 		&u.ID,
