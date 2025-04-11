@@ -37,6 +37,20 @@ func (u *User) BeforeCreate() error {
 	return nil
 }
 
+// BeforeLogin ...
+func (u *User) BeforeLogin() error {
+	if len(u.Password) > 0 {
+		enc, err := encryptString(u.Password)
+		if err != nil {
+			return err
+		}
+
+		u.EncryptedPassword = enc
+	}
+
+	return nil
+}
+
 // Sanitize ...
 func (u *User) Sanitize() {
 	u.Password = ""

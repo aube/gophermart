@@ -8,7 +8,7 @@ import (
 
 type UserRepositoryProvider interface {
 	Register(context.Context, *model.User) error
-	Login(context.Context, string) (*model.User, error)
+	Login(context.Context, *model.User) (*model.User, error)
 	Orders(context.Context, string) (*model.User, error)
 	Balance(context.Context, string) (*model.User, error)
 	UploadOrders(context.Context, string) (*model.User, error)
