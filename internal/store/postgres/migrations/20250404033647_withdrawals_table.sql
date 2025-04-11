@@ -4,7 +4,7 @@
 CREATE TABLE withdravals (
     id serial not null primary key,
     user_id int not null,
-    amount bigint not null,
+    loyalty_points bigint not null check (loyalty_points >= 0),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
