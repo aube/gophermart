@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
 )
 
@@ -23,7 +24,7 @@ func (r *BillingRepository) Balance(ctx context.Context, u *model.User) (*model.
 		&u.EncryptedPassword,
 	); err != nil {
 		if err == sql.ErrNoRows {
-			return nil, errRecordNotFound
+			return nil, httperrors.NewRecordNotFound()
 		}
 
 		return nil, err
@@ -35,7 +36,7 @@ func (r *BillingRepository) Balance(ctx context.Context, u *model.User) (*model.
 // BalanceWithdraw ...
 func (r *BillingRepository) BalanceWithdraw(ctx context.Context, u *model.User, points int) (*model.User, error) {
 	if err := r.db.QueryRow(
-		"insert into withdrawals set user_id = $1, loyalty_points = $2",
+		"insert into withdrawals set user_id = $1, accrual = $2",
 		u.ID,
 	).Scan(
 		&u.ID,
@@ -43,7 +44,7 @@ func (r *BillingRepository) BalanceWithdraw(ctx context.Context, u *model.User, 
 		&u.EncryptedPassword,
 	); err != nil {
 		if err == sql.ErrNoRows {
-			return nil, errRecordNotFound
+			return nil, httperrors.NewRecordNotFound()
 		}
 
 		return nil, err
@@ -63,7 +64,7 @@ func (r *BillingRepository) Withdrawals(ctx context.Context, u *model.User) (*mo
 		&u.EncryptedPassword,
 	); err != nil {
 		if err == sql.ErrNoRows {
-			return nil, errRecordNotFound
+			return nil, httperrors.NewRecordNotFound()
 		}
 
 		return nil, err

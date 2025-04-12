@@ -1,15 +1,15 @@
 package api
 
 import (
+	"errors"
 	"io"
 	"net/http"
 
+	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
 )
 
 func (s *Server) UserRegister(w http.ResponseWriter, r *http.Request) {
-	httpStatus := http.StatusCreated
-
 	ctx := r.Context()
 
 	if r.Body == nil || r.ContentLength == 0 {
@@ -30,6 +30,7 @@ func (s *Server) UserRegister(w http.ResponseWriter, r *http.Request) {
 	user, err := model.ParseCredentials(body)
 	if err != nil {
 		s.logger.ErrorContext(ctx, "HandlerCreateUser", "err", err)
+		http.Error(w, "Failed to read request body", http.StatusBadRequest)
 		return
 	}
 
@@ -37,14 +38,21 @@ func (s *Server) UserRegister(w http.ResponseWriter, r *http.Request) {
 	err = s.store.User.Register(ctx, &user)
 	if err != nil {
 		s.logger.ErrorContext(ctx, "HandlerCreateUser", "err", err)
-		httpStatus = http.StatusConflict
+
+		var heherr *httperrors.HTTPError
+		if errors.As(err, &heherr) {
+			http.Error(w, heherr.Message, heherr.Code)
+		} else {
+			http.Error(w, "Failed to create user", http.StatusInternalServerError)
+		}
+
+		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(httpStatus)
-	w.Write([]byte("Ololo, World!"))
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("User registered"))
 
-	s.logger.Debug("HandlerCreateUser", "httpStatus", err)
+	s.logger.Debug("HandlerCreateUser", "User registered", user.ID)
 }
 
 // Регистрация пользователя
