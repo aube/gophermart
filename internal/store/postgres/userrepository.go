@@ -3,8 +3,12 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"errors"
 
+	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
+	"github.com/jackc/pgerrcode"
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
 // UserRepository ...
@@ -15,18 +19,27 @@ type UserRepository struct {
 // Register ...
 func (r *UserRepository) Register(ctx context.Context, u *model.User) error {
 	if err := u.Validate(); err != nil {
-		return err
+		return httperrors.NewValidationError(err)
 	}
 
 	if err := u.BeforeCreate(); err != nil {
 		return err
 	}
 
-	return r.db.QueryRow(
-		"INSERT INTO users (email, encrypted_password) VALUES ($1, $2) RETURNING id",
+	err := r.db.QueryRowContext(
+		ctx,
+		"INSERT INTO users (email, encrypted_password) VALUES ($1, $2) ON CONFLICT (email) DO NOTHING RETURNING id",
 		u.Email,
 		u.EncryptedPassword,
 	).Scan(&u.ID)
+
+	// проверяем, что ошибка сигнализирует о потенциальном нарушении целостности данных
+	var pgErr *pgconn.PgError
+	if errors.As(err, &pgErr) && pgerrcode.IsIntegrityConstraintViolation(pgErr.Code) {
+		return httperrors.NewConflictError()
+	}
+
+	return nil
 }
 
 // Login ...
@@ -47,7 +60,7 @@ func (r *UserRepository) Login(ctx context.Context, u *model.User) (*model.User,
 		&u.ID,
 	); err != nil {
 		if err == sql.ErrNoRows {
-			return nil, errRecordNotFound
+			return nil, httperrors.NewRecordNotFound()
 		}
 
 		return nil, err

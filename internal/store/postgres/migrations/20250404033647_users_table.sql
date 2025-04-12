@@ -5,15 +5,15 @@ CREATE TABLE users (
     id serial not null primary key,
     email varchar not null unique,
     encrypted_password varchar not null,
-    loyalty_points bigint not null check (loyalty_points >= 0) default 0,
+    accrual bigint not null check (accrual >= 0) default 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted boolean not null default false
 );
 
-create INDEX idx_email on users (email);
+create INDEX users_email on users (email);
 
-create INDEX idx_encrypted_password on users (encrypted_password);
+create INDEX users_encrypted_password on users (encrypted_password);
 
 
 CREATE TRIGGER users_updated_at_trigger
@@ -28,8 +28,8 @@ EXECUTE FUNCTION update_updated_at();
 
 DROP TRIGGER users_updated_at_trigger ON users;
 
-drop INDEX idx_encrypted_password;
-drop INDEX idx_email;
+drop INDEX users_encrypted_password;
+drop INDEX users_email;
 
 DROP TABLE users;
 

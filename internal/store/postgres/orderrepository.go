@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
 )
 
@@ -21,7 +22,7 @@ func (r *OrderRepository) Orders(ctx context.Context, u *model.User) (*model.Use
 		&u.ID,
 	); err != nil {
 		if err == sql.ErrNoRows {
-			return nil, errRecordNotFound
+			return nil, httperrors.NewRecordNotFound()
 		}
 
 		return nil, err
@@ -42,7 +43,7 @@ func (r *OrderRepository) UploadOrders(ctx context.Context, u *model.User, order
 		&u.EncryptedPassword,
 	); err != nil {
 		if err == sql.ErrNoRows {
-			return nil, errRecordNotFound
+			return nil, httperrors.NewRecordNotFound()
 		}
 
 		return nil, err

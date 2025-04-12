@@ -1,22 +1,22 @@
 -- +goose Up
 -- +goose StatementBegin
 
-CREATE TABLE withdravals (
+CREATE TABLE withdrawals (
     id serial not null primary key,
     user_id int not null,
-    loyalty_points bigint not null check (loyalty_points >= 0),
+    accrual bigint not null check (accrual >= 0),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-create INDEX user_id on withdravals (user_id);
+create INDEX withdrawals_user_id on withdrawals (user_id);
 
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
 
-drop INDEX user_id;
+drop INDEX withdrawals_user_id;
 
-DROP TABLE withdravals;
+DROP TABLE withdrawals;
 
 -- +goose StatementEnd
