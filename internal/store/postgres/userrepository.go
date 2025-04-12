@@ -35,6 +35,10 @@ func (r *UserRepository) Login(ctx context.Context, u *model.User) (*model.User,
 		return nil, err
 	}
 
+	if err := u.BeforeLogin(); err != nil {
+		return nil, err
+	}
+
 	if err := r.db.QueryRow(
 		"SELECT id, email FROM users WHERE email = $1 and encrypted_password = $2",
 		u.Email,
@@ -53,15 +57,12 @@ func (r *UserRepository) Login(ctx context.Context, u *model.User) (*model.User,
 }
 
 // Orders ...
-func (r *UserRepository) Orders(ctx context.Context, email string) (*model.User, error) {
-	u := &model.User{}
+func (r *UserRepository) Orders(ctx context.Context, u *model.User) (*model.User, error) {
 	if err := r.db.QueryRow(
 		"SELECT * FROM orders WHERE user_id = $1",
-		email,
+		u.ID,
 	).Scan(
 		&u.ID,
-		&u.Email,
-		&u.EncryptedPassword,
 	); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, errRecordNotFound
@@ -74,11 +75,10 @@ func (r *UserRepository) Orders(ctx context.Context, email string) (*model.User,
 }
 
 // Orders ...
-func (r *UserRepository) Balance(ctx context.Context, email string) (*model.User, error) {
-	u := &model.User{}
+func (r *UserRepository) Balance(ctx context.Context, u *model.User) (*model.User, error) {
 	if err := r.db.QueryRow(
-		"SELECT * FROM orders WHERE user_id = $1",
-		email,
+		"SELECT * FROM users WHERE user_id = $1",
+		u.ID,
 	).Scan(
 		&u.ID,
 		&u.Email,
@@ -95,11 +95,11 @@ func (r *UserRepository) Balance(ctx context.Context, email string) (*model.User
 }
 
 // UploadOrders ...
-func (r *UserRepository) UploadOrders(ctx context.Context, email string) (*model.User, error) {
-	u := &model.User{}
+func (r *UserRepository) UploadOrders(ctx context.Context, u *model.User, orderID int) (*model.User, error) {
 	if err := r.db.QueryRow(
-		"SELECT * FROM orders WHERE user_id = $1",
-		email,
+		"insert into orders set user_id = $1, order_id = $2",
+		u.ID,
+		orderID,
 	).Scan(
 		&u.ID,
 		&u.Email,
@@ -116,11 +116,10 @@ func (r *UserRepository) UploadOrders(ctx context.Context, email string) (*model
 }
 
 // BalanceWithdraw ...
-func (r *UserRepository) BalanceWithdraw(ctx context.Context, email string) (*model.User, error) {
-	u := &model.User{}
+func (r *UserRepository) BalanceWithdraw(ctx context.Context, u *model.User, points int) (*model.User, error) {
 	if err := r.db.QueryRow(
-		"SELECT * FROM orders WHERE user_id = $1",
-		email,
+		"insert into withdrawals set user_id = $1, loyalty_points = $2",
+		u.ID,
 	).Scan(
 		&u.ID,
 		&u.Email,
@@ -137,11 +136,10 @@ func (r *UserRepository) BalanceWithdraw(ctx context.Context, email string) (*mo
 }
 
 // Withdrawals ...
-func (r *UserRepository) Withdrawals(ctx context.Context, email string) (*model.User, error) {
-	u := &model.User{}
+func (r *UserRepository) Withdrawals(ctx context.Context, u *model.User) (*model.User, error) {
 	if err := r.db.QueryRow(
-		"SELECT * FROM orders WHERE user_id = $1",
-		email,
+		"SELECT * FROM withdrawals WHERE user_id = $1",
+		u.ID,
 	).Scan(
 		&u.ID,
 		&u.Email,
