@@ -14,11 +14,19 @@ type Order struct {
 	Status        string `json:"status"`
 }
 
-// Validate ...
-func (o *Order) Validate() error {
+// CreateValidate ...
+func (o *Order) CreateValidate() error {
 	return validation.ValidateStruct(
 		o,
-		validation.Field(&o.ID, validation.Required, is.Int),
+		validation.Field(&o.OrderID, validation.Required, is.Int),
 		validation.Field(&o.UserID, validation.Required, is.Int),
+	)
+}
+
+// UpdateValidate ...
+func (o *Order) UpdateValidate() error {
+	return validation.ValidateStruct(
+		o,
+		validation.Field(&o.OrderID, validation.Required, is.Int),
 	)
 }

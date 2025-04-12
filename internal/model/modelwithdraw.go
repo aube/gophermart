@@ -6,17 +6,17 @@ import (
 )
 
 // User ...
-type Order struct {
+type Withdraw struct {
 	ID            int    `json:"id"`
 	UserID        int    `json:"user_id"`
 	LoyaltyPoints string `json:"loyalty_points"`
 }
 
 // Validate ...
-func (o *Order) Validate() error {
+func (w *Withdraw) Validate() error {
 	return validation.ValidateStruct(
-		o,
-		validation.Field(&o.ID, validation.Required, is.Int),
-		validation.Field(&o.UserID, validation.Required, is.Int),
+		w,
+		validation.Field(&w.UserID, validation.Required, is.Int),
+		validation.Field(&w.LoyaltyPoints, validation.Required, is.Int),
 	)
 }

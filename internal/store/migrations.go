@@ -7,6 +7,8 @@ import (
 	"github.com/pressly/goose/v3"
 )
 
+// Postgres
+//
 //go:embed postgres/migrations/*.sql
 var embedPostgresMigrations embed.FS
 
@@ -22,3 +24,5 @@ func runPostgresMigrations(db *sql.DB) {
 		panic(err)
 	}
 }
+
+//Others ...
