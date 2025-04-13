@@ -35,3 +35,7 @@ func NewValidationError(validationError error) error {
 func NewConflictError() error {
 	return NewHTTPError(http.StatusConflict, "Conflict")
 }
+
+func NewAccessDenied() error {
+	return NewHTTPError(http.StatusForbidden, "Access denied")
+}

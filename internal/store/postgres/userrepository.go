@@ -48,22 +48,22 @@ func (r *UserRepository) Login(ctx context.Context, u *model.User) (*model.User,
 		return nil, err
 	}
 
-	if err := u.BeforeLogin(); err != nil {
-		return nil, err
-	}
-
 	if err := r.db.QueryRow(
-		"SELECT id, email FROM users WHERE email = $1 and encrypted_password = $2",
+		"SELECT id, encrypted_password FROM users WHERE email = $1",
 		u.Email,
-		u.EncryptedPassword,
 	).Scan(
 		&u.ID,
+		&u.EncryptedPassword,
 	); err != nil {
 		if err == sql.ErrNoRows {
 			return nil, httperrors.NewRecordNotFound()
 		}
 
 		return nil, err
+	}
+
+	if !u.ComparePassword(u.Password) {
+		return nil, httperrors.NewAccessDenied()
 	}
 
 	return u, nil
