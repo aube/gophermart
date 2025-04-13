@@ -1,15 +1,15 @@
 package api
 
 import (
+	"errors"
 	"io"
 	"net/http"
 
+	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
 )
 
 func (s *Server) UserLogin(w http.ResponseWriter, r *http.Request) {
-	httpStatus := http.StatusCreated
-
 	ctx := r.Context()
 
 	if r.Body == nil || r.ContentLength == 0 {
@@ -37,14 +37,21 @@ func (s *Server) UserLogin(w http.ResponseWriter, r *http.Request) {
 	_, err = s.store.User.Login(ctx, &user)
 	if err != nil {
 		s.logger.ErrorContext(ctx, "UserLogin", "err", err)
-		httpStatus = http.StatusConflict
+
+		var heherr *httperrors.HTTPError
+		if errors.As(err, &heherr) {
+			http.Error(w, heherr.Message, heherr.Code)
+		} else {
+			http.Error(w, "Failed to create user", http.StatusInternalServerError)
+		}
+
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(httpStatus)
+	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Ololo, World!"))
 
-	s.logger.Debug("UserLogin", "httpStatus", err)
 }
 
 // Аутентификация пользователя
