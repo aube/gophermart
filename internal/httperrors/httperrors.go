@@ -36,6 +36,10 @@ func NewConflictError() error {
 	return NewHTTPError(http.StatusConflict, "Conflict")
 }
 
+func NewLoginFailed() error {
+	return NewHTTPError(http.StatusForbidden, "Login failed")
+}
+
 func NewAccessDenied() error {
 	return NewHTTPError(http.StatusForbidden, "Access denied")
 }

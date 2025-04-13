@@ -63,7 +63,7 @@ func (r *UserRepository) Login(ctx context.Context, u *model.User) (*model.User,
 	}
 
 	if !u.ComparePassword(u.Password) {
-		return nil, httperrors.NewAccessDenied()
+		return nil, httperrors.NewLoginFailed()
 	}
 
 	return u, nil
