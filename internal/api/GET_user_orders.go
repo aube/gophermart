@@ -21,7 +21,7 @@ func (s *Server) UserOrders(w http.ResponseWriter, r *http.Request) {
 		if errors.As(err, &heherr) {
 			http.Error(w, heherr.Message, heherr.Code)
 		} else {
-			http.Error(w, "Failed to create user", http.StatusInternalServerError)
+			http.Error(w, "Failed to read user orders", http.StatusInternalServerError)
 		}
 
 		return
@@ -36,7 +36,7 @@ func (s *Server) UserOrders(w http.ResponseWriter, r *http.Request) {
 	result, err := model.OrdersToJSON(orders)
 
 	if err != nil {
-		http.Error(w, "Failed to create user", http.StatusInternalServerError)
+		http.Error(w, "Failed to convert user orders", http.StatusInternalServerError)
 		return
 	}
 
