@@ -11,7 +11,7 @@ type Order struct {
 	UserID     string `json:"-"`
 	Accrual    int    `json:"accrual,omitempty"`
 	Status     string `json:"status"`
-	UploadedAT string `json:"upload_at"`
+	UploadedAT string `json:"uploaded_at" db:"created_at"`
 }
 
 // CreateValidate ...

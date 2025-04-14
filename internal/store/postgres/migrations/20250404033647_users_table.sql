@@ -5,7 +5,8 @@ CREATE TABLE users (
     id serial not null primary key,
     email varchar not null unique,
     encrypted_password varchar not null,
-    accrual bigint not null check (accrual >= 0) default 0,
+    balance bigint not null check (balance >= 0) default 0,
+    withdrawn bigint not null check (withdrawn >= 0) default 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted boolean not null default false

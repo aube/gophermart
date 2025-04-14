@@ -8,7 +8,7 @@ CREATE TABLE orders (
     user_id int not null,
     accrual bigint not null check (accrual >= 0) default 0,
     status order_status NOT NULL DEFAULT 'NEW',
-    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     deleted boolean not null default false
 );

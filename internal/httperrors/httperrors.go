@@ -51,3 +51,7 @@ func NewAccessDenied() error {
 func NewAlreadyUploadedError() error {
 	return NewHTTPError(http.StatusOK, "Already uploaded")
 }
+
+func NewNotEnoughMoneyError() error {
+	return NewHTTPError(402, "I need more gold!")
+}
