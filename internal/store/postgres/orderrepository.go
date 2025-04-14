@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"fmt"
 
 	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
@@ -14,40 +15,53 @@ type OrderRepository struct {
 }
 
 // Orders ...
-func (r *OrderRepository) Orders(ctx context.Context, u *model.User) (*model.User, error) {
-	if err := r.db.QueryRow(
-		"SELECT * FROM orders WHERE user_id = $1",
-		u.ID,
-	).Scan(
-		&u.ID,
-	); err != nil {
-		if err == sql.ErrNoRows {
-			return nil, httperrors.NewRecordNotFound()
+func (r *OrderRepository) Orders(ctx context.Context, userID int) ([]model.Order, error) {
+
+	rows, err := r.db.QueryContext(
+		ctx,
+		"select id, accrual, status, uploaded_at from orders where user_id=$1",
+		userID,
+	)
+	if err != nil {
+		return []model.Order{}, httperrors.NewServerError(err)
+	}
+	defer rows.Close()
+
+	var result []model.Order
+
+	for rows.Next() {
+		var o model.Order
+		err := rows.Scan(&o.ID, &o.Accrual, &o.Status, &o.UploadedAT)
+
+		if err != nil {
+			return []model.Order{}, httperrors.NewServerError(err)
 		}
 
-		return nil, err
+		result = append(result, o)
 	}
 
-	return u, nil
+	return result, nil
 }
 
 // UploadOrders ...
-func (r *OrderRepository) UploadOrders(ctx context.Context, u *model.User, orderID int) (*model.User, error) {
-	if err := r.db.QueryRow(
-		"insert into orders set user_id = $1, order_id = $2",
-		u.ID,
-		orderID,
-	).Scan(
-		&u.ID,
-		&u.Email,
-		&u.EncryptedPassword,
-	); err != nil {
-		if err == sql.ErrNoRows {
-			return nil, httperrors.NewRecordNotFound()
-		}
-
-		return nil, err
+func (r *OrderRepository) UploadOrders(ctx context.Context, o *model.Order) error {
+	if err := o.CreateValidate(); err != nil {
+		return httperrors.NewValidationError(err)
 	}
 
-	return u, nil
+	var newID int
+	r.db.QueryRowContext(
+		ctx,
+		"INSERT INTO orders (id, user_id) VALUES ($1, $2) ON CONFLICT (id) DO NOTHING RETURNING id",
+		o.ID,
+		o.UserID,
+	).Scan(&newID)
+
+	fmt.Println(newID)
+
+	if newID == 0 {
+		return httperrors.NewAlreadyUploadedError()
+	}
+
+	return nil
 }

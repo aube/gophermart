@@ -1,19 +1,19 @@
 package api
 
 import (
+	"errors"
 	"io"
 	"net/http"
 
+	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
 )
 
 func (s *Server) UploadUserOrders(w http.ResponseWriter, r *http.Request) {
-	httpStatus := http.StatusCreated
-
 	ctx := r.Context()
 
 	if r.Body == nil || r.ContentLength == 0 {
-		s.logger.ErrorContext(ctx, "HandlerCreateUser", "Request body is empty", "")
+		s.logger.ErrorContext(ctx, "UploadUserOrders", "Request body is empty", "")
 		http.Error(w, "Request body is empty", http.StatusBadRequest)
 		return
 	}
@@ -21,30 +21,38 @@ func (s *Server) UploadUserOrders(w http.ResponseWriter, r *http.Request) {
 	// Body
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		s.logger.ErrorContext(ctx, "HandlerCreateUser", "err", err)
+		s.logger.ErrorContext(ctx, "UploadUserOrders", "err", err)
 		http.Error(w, "Failed to read request body", http.StatusInternalServerError)
 		return
 	}
 
-	// JSON
-	user, err := model.ParseCredentials(body)
+	// OrderID
+	order, err := model.ParseOrderID(body)
 	if err != nil {
-		s.logger.ErrorContext(ctx, "HandlerCreateUser", "err", err)
+		s.logger.ErrorContext(ctx, "UploadUserOrders", "err", err)
+		http.Error(w, "Failed to convert body to uint64", http.StatusBadRequest)
 		return
 	}
 
 	// Store
-	err = s.store.User.Register(ctx, &user)
+	err = s.store.Order.UploadOrders(ctx, &order)
 	if err != nil {
-		s.logger.ErrorContext(ctx, "HandlerCreateUser", "err", err)
-		httpStatus = http.StatusConflict
+		s.logger.ErrorContext(ctx, "UploadUserOrders", "err", err)
+
+		var heherr *httperrors.HTTPError
+		if errors.As(err, &heherr) {
+			http.Error(w, heherr.Message, heherr.Code)
+		} else {
+			http.Error(w, "Failed to create user", http.StatusInternalServerError)
+		}
+
+		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(httpStatus)
-	w.Write([]byte("Ololo, World!"))
+	w.WriteHeader(http.StatusAccepted)
+	w.Write([]byte("Order uploaded"))
 
-	s.logger.Debug("HandlerCreateUser", "httpStatus", err)
+	s.logger.Debug("HandlerCreateUser", "Order uploaded", order.ID)
 }
 
 // Загрузка номера заказа
@@ -68,3 +76,5 @@ func (s *Server) UploadUserOrders(w http.ResponseWriter, r *http.Request) {
 //     409 — номер заказа уже был загружен другим пользователем;
 //     422 — неверный формат номера заказа;
 //     500 — внутренняя ошибка сервера.
+//
+//

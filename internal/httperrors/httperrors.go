@@ -24,6 +24,10 @@ func NewHTTPError(code int, message string) error {
 	}
 }
 
+func NewServerError(err error) error {
+	return NewHTTPError(500, fmt.Sprint(err))
+}
+
 func NewRecordNotFound() error {
 	return NewHTTPError(404, "Record not found")
 }
@@ -42,4 +46,8 @@ func NewLoginFailed() error {
 
 func NewAccessDenied() error {
 	return NewHTTPError(http.StatusForbidden, "Access denied")
+}
+
+func NewAlreadyUploadedError() error {
+	return NewHTTPError(http.StatusOK, "Already uploaded")
 }

@@ -1,20 +1,50 @@
 package api
 
 import (
+	"errors"
 	"net/http"
+
+	"github.com/aube/gophermart/internal/httperrors"
+	"github.com/aube/gophermart/internal/model"
 )
 
 func (s *Server) UserOrders(w http.ResponseWriter, r *http.Request) {
-	token := r.Header.Get("x-token")
+	ctx := r.Context()
 
-	s.logger.Info("ololo")
+	// Store
+	orders, err := s.store.Order.Orders(ctx, 313)
 
-	if token == "" {
-		http.Error(w, "x-token header must be specified", http.StatusBadRequest)
+	if err != nil {
+		s.logger.ErrorContext(ctx, "UploadUserOrders", "err", err)
+
+		var heherr *httperrors.HTTPError
+		if errors.As(err, &heherr) {
+			http.Error(w, heherr.Message, heherr.Code)
+		} else {
+			http.Error(w, "Failed to create user", http.StatusInternalServerError)
+		}
+
 		return
 	}
 
+	if len(orders) == 0 {
+		http.Error(w, "No data", http.StatusNoContent)
+		return
+	}
+
+	// JSON
+	result, err := model.OrdersToJSON(orders)
+
+	if err != nil {
+		http.Error(w, "Failed to create user", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
+	w.Write(result)
+
+	s.logger.Debug("HandlerCreateUser", "Order uploaded", result)
 }
 
 // Получение списка загруженных номеров заказов
