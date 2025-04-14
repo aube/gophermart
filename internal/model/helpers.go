@@ -55,3 +55,9 @@ func OrdersToJSON(orders []Order) ([]byte, error) {
 
 	return jsonData, err
 }
+
+func BalanceToJSON(balance Balance) ([]byte, error) {
+	jsonData, err := json.Marshal(balance)
+
+	return jsonData, err
+}

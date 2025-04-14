@@ -1,36 +1,34 @@
 package api
 
 import (
-	"errors"
 	"net/http"
 
-	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
 )
 
 func (s *Server) UserBalance(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
+	// ctx := r.Context()
 
-	user := model.User{}
+	user := model.User{
+		Balance:   111111,
+		Withdrawn: 111111,
+	}
 
-	// Store
-	_, err = s.store.User.Balance(ctx, &user)
+	balance := model.Balance{
+		Current:   float64(user.Balance) / 100,
+		Withdrawn: float64(user.Withdrawn) / 100,
+	}
+
+	json, err := model.BalanceToJSON(balance)
+
 	if err != nil {
-		s.logger.ErrorContext(ctx, "UserLogin", "err", err)
-
-		var heherr *httperrors.HTTPError
-		if errors.As(err, &heherr) {
-			http.Error(w, heherr.Message, heherr.Code)
-		} else {
-			http.Error(w, "Failed to create user", http.StatusInternalServerError)
-		}
-
+		http.Error(w, "Failed to convert user balance", http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Ololo, World!"))
+	w.Write(json)
 }
 
 // Получение текущего баланса пользователя
