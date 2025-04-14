@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/aube/gophermart/internal/logger"
+	"github.com/aube/gophermart/internal/middlewares"
 	"github.com/aube/gophermart/internal/store"
 )
 
@@ -29,7 +30,7 @@ func NewRouter(store store.Store) *http.ServeMux {
 }
 
 func (s *Server) configureRouter() {
-	s.router.HandleFunc(`GET /user/balance`, http.HandlerFunc(s.UserBalance))
+	s.router.HandleFunc(`GET /user/balance`, middlewares.AuthMiddleware(s.UserBalance))
 	s.router.HandleFunc(`GET /user/orders`, http.HandlerFunc(s.UserOrders))
 	s.router.HandleFunc(`GET /user/withdrawals`, http.HandlerFunc(s.UserWithdrawals))
 	s.router.HandleFunc(`POST /user/balance/withdraw`, http.HandlerFunc(s.UserBalanceWithdraw))
