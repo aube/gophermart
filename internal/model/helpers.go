@@ -2,6 +2,7 @@ package model
 
 import (
 	"encoding/json"
+	"strconv"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -24,4 +25,22 @@ func ParseCredentials(requestBody []byte) (User, error) {
 	}
 
 	return user, nil
+}
+
+func ParseOrderID(requestBody []byte) (Order, error) {
+	id, err := strconv.Atoi(string(requestBody))
+	if err != nil {
+		return Order{}, err
+	}
+
+	return Order{
+		ID:     id,
+		UserID: "33",
+	}, nil
+}
+
+func OrdersToJSON(orders []Order) ([]byte, error) {
+	jsonData, err := json.Marshal(orders)
+
+	return jsonData, err
 }

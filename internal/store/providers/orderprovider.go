@@ -7,6 +7,6 @@ import (
 )
 
 type OrderRepositoryProvider interface {
-	Orders(context.Context, *model.User) (*model.User, error)
-	UploadOrders(context.Context, *model.User, int) (*model.User, error)
+	Orders(context.Context, int) ([]model.Order, error)
+	UploadOrders(context.Context, *model.Order) error
 }

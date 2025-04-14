@@ -7,18 +7,17 @@ import (
 
 // User ...
 type Order struct {
-	ID      int    `json:"id"`
-	OrderID int    `json:"order_id"`
-	UserID  int    `json:"user_id"`
-	Accrual string `json:"accrual"`
-	Status  string `json:"status"`
+	ID         int    `json:"id"`
+	UserID     string `json:"-"`
+	Accrual    int    `json:"accrual,omitempty"`
+	Status     string `json:"status"`
+	UploadedAT string `json:"upload_at"`
 }
 
 // CreateValidate ...
 func (o *Order) CreateValidate() error {
 	return validation.ValidateStruct(
 		o,
-		validation.Field(&o.OrderID, validation.Required, is.Int),
 		validation.Field(&o.UserID, validation.Required, is.Int),
 	)
 }
@@ -27,6 +26,6 @@ func (o *Order) CreateValidate() error {
 func (o *Order) UpdateValidate() error {
 	return validation.ValidateStruct(
 		o,
-		validation.Field(&o.OrderID, validation.Required, is.Int),
+		validation.Field(&o.ID, validation.Required, is.Int),
 	)
 }
