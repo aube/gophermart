@@ -12,7 +12,8 @@ type User struct {
 	Email             string `json:"email"`
 	Password          string `json:"password,omitempty"`
 	EncryptedPassword string `json:"-"`
-	Accrual           string `json:"accrual"`
+	Balance           int64  `json:"balance"`
+	Withdrawn         int64  `json:"withdrawn"`
 }
 
 // Validate ...

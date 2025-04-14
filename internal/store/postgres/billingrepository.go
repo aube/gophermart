@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"errors"
 
 	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
@@ -34,41 +35,70 @@ func (r *BillingRepository) Balance(ctx context.Context, u *model.User) (*model.
 }
 
 // BalanceWithdraw ...
-func (r *BillingRepository) BalanceWithdraw(ctx context.Context, u *model.User, points int) (*model.User, error) {
-	if err := r.db.QueryRow(
-		"insert into withdrawals set user_id = $1, accrual = $2",
-		u.ID,
-	).Scan(
-		&u.ID,
-		&u.Email,
-		&u.EncryptedPassword,
-	); err != nil {
-		if err == sql.ErrNoRows {
-			return nil, httperrors.NewRecordNotFound()
-		}
-
-		return nil, err
+func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withdraw, u *model.User) error {
+	if u.Balance < wd.Amount {
+		return httperrors.NewNotEnoughMoneyError()
 	}
 
-	return u, nil
+	tx, err := r.db.Begin()
+	if err != nil {
+		return httperrors.NewServerError(err)
+	}
+
+	var newID int
+	err = tx.QueryRowContext(
+		ctx,
+		"insert into withdrawals set user_id = $1, amount = $2 RETURNING id",
+		u.ID,
+		wd.Amount,
+	).Scan(&newID)
+
+	if err != nil {
+		tx.Rollback()
+		return httperrors.NewServerError(err)
+	}
+	if newID == 0 {
+		tx.Rollback()
+		return httperrors.NewServerError(errors.New("Withdraw error"))
+	}
+
+	err = tx.QueryRowContext(
+		ctx,
+		"update users set balance = $1, withdrawn = $2 where id = $3",
+		u.Balance-wd.Amount,
+		u.Withdrawn+wd.Amount,
+		u.ID,
+	).Scan(&newID)
+
+	return tx.Commit()
+
 }
 
 // Withdrawals ...
-func (r *BillingRepository) Withdrawals(ctx context.Context, u *model.User) (*model.User, error) {
-	if err := r.db.QueryRow(
-		"SELECT * FROM withdrawals WHERE user_id = $1",
+func (r *BillingRepository) Withdrawals(ctx context.Context, u *model.User) ([]model.Withdraw, error) {
+	rows, err := r.db.QueryContext(
+		ctx,
+		"select order_id, amount/100 as sum, created_at from billing where user_id=$1",
 		u.ID,
-	).Scan(
-		&u.ID,
-		&u.Email,
-		&u.EncryptedPassword,
-	); err != nil {
-		if err == sql.ErrNoRows {
-			return nil, httperrors.NewRecordNotFound()
+	)
+
+	if err != nil {
+		return []model.Withdraw{}, httperrors.NewServerError(err)
+	}
+	defer rows.Close()
+
+	var result []model.Withdraw
+
+	for rows.Next() {
+		var wd model.Withdraw
+		err := rows.Scan(&wd.OrderID, &wd.Sum, &wd.ProcessedAt)
+
+		if err != nil {
+			return []model.Withdraw{}, httperrors.NewServerError(err)
 		}
 
-		return nil, err
+		result = append(result, wd)
 	}
 
-	return u, nil
+	return result, nil
 }

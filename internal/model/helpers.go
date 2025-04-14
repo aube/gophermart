@@ -39,6 +39,17 @@ func ParseOrderID(requestBody []byte) (Order, error) {
 	}, nil
 }
 
+func ParseWithdraw(requestBody []byte) (Withdraw, error) {
+	var wd Withdraw
+
+	err := json.Unmarshal(requestBody, &wd)
+	if err != nil {
+		return Withdraw{}, err
+	}
+
+	return wd, nil
+}
+
 func OrdersToJSON(orders []Order) ([]byte, error) {
 	jsonData, err := json.Marshal(orders)
 

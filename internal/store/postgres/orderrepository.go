@@ -19,7 +19,7 @@ func (r *OrderRepository) Orders(ctx context.Context, userID int) ([]model.Order
 
 	rows, err := r.db.QueryContext(
 		ctx,
-		"select id, accrual, status, uploaded_at from orders where user_id=$1",
+		"select id, accrual, status, created_at from orders where user_id=$1",
 		userID,
 	)
 	if err != nil {
