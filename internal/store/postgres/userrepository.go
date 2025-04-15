@@ -68,3 +68,30 @@ func (r *UserRepository) Login(ctx context.Context, u *model.User) (*model.User,
 
 	return u, nil
 }
+
+// Balance ...
+func (r *UserRepository) Balance(ctx context.Context, u *model.User) (*model.User, error) {
+	if err := u.Validate(); err != nil {
+		return nil, err
+	}
+
+	if err := r.db.QueryRow(
+		"SELECT id, encrypted_password FROM users WHERE email = $1",
+		u.Email,
+	).Scan(
+		&u.ID,
+		&u.EncryptedPassword,
+	); err != nil {
+		if err == sql.ErrNoRows {
+			return nil, httperrors.NewRecordNotFound()
+		}
+
+		return nil, err
+	}
+
+	if !u.ComparePassword(u.Password) {
+		return nil, httperrors.NewLoginFailed()
+	}
+
+	return u, nil
+}

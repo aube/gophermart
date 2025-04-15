@@ -7,23 +7,26 @@ import (
 
 	_ "github.com/lib/pq"
 
+	"github.com/aube/gophermart/internal/store/memory"
 	"github.com/aube/gophermart/internal/store/postgres"
 	"github.com/aube/gophermart/internal/store/providers"
 )
 
 type Store struct {
-	User    providers.UserRepositoryProvider
-	Order   providers.OrderRepositoryProvider
-	Billing providers.BillingRepositoryProvider
+	User       providers.UserRepositoryProvider
+	ActiveUser providers.ActiveUserRepositoryProvider
+	Order      providers.OrderRepositoryProvider
+	Billing    providers.BillingRepositoryProvider
 }
 
 func NewStore(config string) (Store, error) {
 	db, err := NewDB(config)
 
 	store := Store{
-		User:    postgres.New(db).User(),
-		Order:   postgres.New(db).Order(),
-		Billing: postgres.New(db).Billing(),
+		User:       postgres.New(db).User(),
+		ActiveUser: memory.New().ActiveUser(),
+		Order:      postgres.New(db).Order(),
+		Billing:    postgres.New(db).Billing(),
 	}
 
 	return store, err
