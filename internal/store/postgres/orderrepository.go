@@ -28,6 +28,10 @@ func (r *OrderRepository) Orders(ctx context.Context, userID int) ([]model.Order
 	}
 	defer rows.Close()
 
+	if err := rows.Err(); err != nil {
+		return []model.Order{}, httperrors.NewServerError(err)
+	}
+
 	var result []model.Order
 
 	for rows.Next() {
@@ -75,9 +79,13 @@ func (r *OrderRepository) GetNewOrdersID(ctx context.Context) ([]int, error) {
 		"select id from orders where status='NEW'",
 	)
 	if err != nil {
-		return nil, errors.New("Orders select error")
+		return nil, errors.New("orders select error")
 	}
 	defer rows.Close()
+
+	if err := rows.Err(); err != nil {
+		return []int{}, httperrors.NewServerError(err)
+	}
 
 	var result []int
 
@@ -86,7 +94,7 @@ func (r *OrderRepository) GetNewOrdersID(ctx context.Context) ([]int, error) {
 		err := rows.Scan(&id)
 
 		if err != nil {
-			return nil, errors.New("Order Scan error")
+			return nil, errors.New("order Scan error")
 		}
 
 		result = append(result, id)
@@ -105,7 +113,7 @@ func (r *OrderRepository) SetStatus(ctx context.Context, id int, status string) 
 	)
 
 	if err != nil {
-		return errors.New("Order change status error")
+		return errors.New("order change status error")
 	}
 
 	return nil
@@ -148,7 +156,7 @@ func (r *OrderRepository) SetAccrual(ctx context.Context, id int, accrual int) e
 
 	if err != nil {
 		tx.Rollback()
-		return errors.New("Order change status error")
+		return errors.New("urder change status error")
 	}
 
 	// Change user balance
@@ -161,7 +169,7 @@ func (r *OrderRepository) SetAccrual(ctx context.Context, id int, accrual int) e
 
 	if err != nil {
 		tx.Rollback()
-		return errors.New("User change balance error")
+		return errors.New("user change balance error")
 	}
 
 	tx.Commit()

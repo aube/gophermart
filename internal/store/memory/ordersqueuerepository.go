@@ -15,7 +15,7 @@ func (q *OrdersQueueRepository) Enqueue(item int) {
 // Dequeue ...
 func (q *OrdersQueueRepository) Dequeue() (int, error) {
 	if q.IsEmpty() {
-		return 0, errors.New("Queue is empty")
+		return 0, errors.New("queue is empty")
 	}
 	item := q.oq[0]
 	q.oq = q.oq[1:]

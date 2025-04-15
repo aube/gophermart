@@ -41,9 +41,9 @@ func request(address string) (OrderAccrual, error) {
 
 	switch resp.StatusCode {
 	case 204:
-		return OrderAccrual{}, errors.New("INVALID")
+		return OrderAccrual{}, errors.New("invalid")
 	case 429:
-		return OrderAccrual{}, errors.New("NEW")
+		return OrderAccrual{}, errors.New("new")
 	default:
 		return ParseOrderAccrual(body)
 	}

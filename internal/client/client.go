@@ -55,12 +55,12 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 
 	oa, err := request(accSystemAddress + "/" + strconv.Itoa(id))
 
-	if errors.Is(err, errors.New("NEW")) {
+	if errors.Is(err, errors.New("new")) {
 		store.Order.SetStatus(ctx, id, "NEW")
 		return
 	}
 
-	if errors.Is(err, errors.New("INVALID")) {
+	if errors.Is(err, errors.New("invalid")) {
 		store.Order.SetStatus(ctx, id, "INVALID")
 		return
 	}
