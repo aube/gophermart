@@ -13,23 +13,28 @@ import (
 )
 
 type Store struct {
-	User       providers.UserRepositoryProvider
-	ActiveUser providers.ActiveUserRepositoryProvider
-	Order      providers.OrderRepositoryProvider
-	Billing    providers.BillingRepositoryProvider
+	User        providers.UserRepositoryProvider
+	ActiveUser  providers.ActiveUserRepositoryProvider
+	Order       providers.OrderRepositoryProvider
+	Billing     providers.BillingRepositoryProvider
+	OrdersQueue providers.OrdersQueueRepositoryProvider
 }
 
 func NewStore(config string) (Store, error) {
 	db, err := NewDB(config)
-
-	store := Store{
-		User:       postgres.New(db).User(),
-		ActiveUser: memory.New().ActiveUser(),
-		Order:      postgres.New(db).Order(),
-		Billing:    postgres.New(db).Billing(),
+	if err != nil {
+		return Store{}, err
 	}
 
-	return store, err
+	store := Store{
+		User:        postgres.New(db).User(),
+		Order:       postgres.New(db).Order(),
+		Billing:     postgres.New(db).Billing(),
+		ActiveUser:  memory.New().ActiveUser(),
+		OrdersQueue: memory.New().OrdersQueue(),
+	}
+
+	return store, nil
 }
 
 func NewDB(dsn string) (*sql.DB, error) {
