@@ -1,6 +1,8 @@
 package model
 
 import (
+	"fmt"
+
 	validation "github.com/go-ozzo/ozzo-validation"
 	"github.com/go-ozzo/ozzo-validation/is"
 	"golang.org/x/crypto/bcrypt"
@@ -12,6 +14,7 @@ type User struct {
 	Email             string `json:"email"`
 	Password          string `json:"password,omitempty"`
 	EncryptedPassword string `json:"-"`
+	RandomHash        string `json:"-"`
 	Balance           int64  `json:"balance"`
 	Withdrawn         int64  `json:"withdrawn"`
 }
@@ -39,17 +42,15 @@ func (u *User) BeforeCreate() error {
 	return nil
 }
 
-// BeforeLogin ...
-func (u *User) BeforeLogin() error {
-	if len(u.Password) > 0 {
-		enc, err := encryptString(u.Password)
-		if err != nil {
-			return err
-		}
-
-		u.EncryptedPassword = enc
+// AfterLogin ...
+func (u *User) AfterLogin() error {
+	hash, err := makeHash()
+	if err != nil {
+		return err
 	}
+	u.RandomHash = hash
 
+	fmt.Println(hash)
 	return nil
 }
 

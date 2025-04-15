@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"time"
 
 	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
@@ -48,23 +49,41 @@ func (s *Server) UserLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user.AfterLogin()
+
+	s.store.ActiveUser.Set(ctx, &user)
+
+	setAuthCookie(w, user.RandomHash)
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Ololo, World!"))
+	w.Write([]byte(user.RandomHash))
 
+	s.logger.DebugContext(ctx, "UserLogin", "user", user)
 }
 
-// Аутентификация пользователя
-// Хендлер: POST /api/user/login.
-// Аутентификация производится по паре логин/пароль.
-// Для передачи аутентификационных данных используйте механизм cookies или HTTP-заголовок Authorization.
-// Формат запроса:
+func deleteAuthCookie(w http.ResponseWriter) {
+	c := &http.Cookie{
+		Name:     authCookieName,
+		Value:    "",
+		Expires:  time.Unix(0, 0), // Cookie expires in 24 hours
+		Path:     "/",             // Cookie is accessible across the entire site
+		HttpOnly: true,            // Cookie is not accessible via JavaScript
+		Secure:   false,           // Set to true if using HTTPS
+	}
 
-// POST /api/user/login HTTP/1.1
-// Content-Type: application/json
-// ...
+	http.SetCookie(w, c)
+}
 
-// {
-//     "login": "<login>",
-//     "password": "<password>"
-// }
+func setAuthCookie(w http.ResponseWriter, value string) {
+	c := &http.Cookie{
+		Name:     authCookieName,
+		Value:    value,
+		Expires:  time.Now().Add(24 * time.Hour), // Cookie expires in 24 hours
+		Path:     "/",                            // Cookie is accessible across the entire site
+		HttpOnly: true,                           // Cookie is not accessible via JavaScript
+		Secure:   false,                          // Set to true if using HTTPS
+	}
+
+	http.SetCookie(w, c)
+}

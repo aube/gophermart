@@ -53,7 +53,7 @@ func Init(cfg Config) {
 func New() *slog.Logger {
 	if globalLogger == nil {
 		Init(Config{
-			Level:     slog.LevelInfo,
+			Level:     slog.LevelDebug,
 			Output:    os.Stdout,
 			AddSource: false,
 			JSON:      true,
@@ -61,16 +61,3 @@ func New() *slog.Logger {
 	}
 	return globalLogger
 }
-
-// WithContext creates a new logger with context values
-/* func WithContext(ctx context.Context) *slog.Logger {
-	logger := Get()
-
-	// Add request ID if present in context
-	if reqID, ok := ctx.Value("request_id").(string); ok {
-		logger = logger.With("request_id", reqID)
-	}
-
-	return logger
-}
-*/
