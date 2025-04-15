@@ -30,14 +30,13 @@ func NewRouter(store store.Store) *http.ServeMux {
 
 func (s *Server) configureRouter() {
 	// Public
-	s.router.HandleFunc(`POST /user/register`, http.HandlerFunc(s.UserRegister))
-	s.router.HandleFunc(`POST /user/login`, http.HandlerFunc(s.UserLogin))
+	s.router.HandleFunc(`POST /api/user/register`, http.HandlerFunc(s.UserRegister))
+	s.router.HandleFunc(`POST /api/user/login`, http.HandlerFunc(s.UserLogin))
 
 	// Private
-	s.router.HandleFunc(`GET /user/balance`, s.AuthMiddleware(s.UserBalance))
-	s.router.HandleFunc(`GET /user/orders`, s.AuthMiddleware(s.UserOrders))
-	s.router.HandleFunc(`GET /user/withdrawals`, s.AuthMiddleware(s.UserWithdrawals))
-	s.router.HandleFunc(`POST /user/balance/withdraw`, s.AuthMiddleware(s.UserBalanceWithdraw))
-	s.router.HandleFunc(`POST /user/orders`, s.AuthMiddleware(s.UploadUserOrders))
-
+	s.router.HandleFunc(`GET /api/user/orders`, s.AuthMiddleware(s.UserOrders))
+	s.router.HandleFunc(`GET /api/user/balance`, s.AuthMiddleware(s.UserBalance))
+	s.router.HandleFunc(`POST /api/user/orders`, s.AuthMiddleware(s.UploadUserOrders))
+	s.router.HandleFunc(`GET /api/user/withdrawals`, s.AuthMiddleware(s.UserWithdrawals))
+	s.router.HandleFunc(`POST /api/user/balance/withdraw`, s.AuthMiddleware(s.UserBalanceWithdraw))
 }
