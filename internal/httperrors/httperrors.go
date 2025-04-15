@@ -37,21 +37,29 @@ func NewValidationError(validationError error) error {
 }
 
 func NewConflictError() error {
-	return NewHTTPError(http.StatusConflict, "Conflict")
+	return NewHTTPError(http.StatusConflict, "Conflict") // 409
 }
 
 func NewLoginFailed() error {
-	return NewHTTPError(http.StatusForbidden, "Login failed")
+	return NewHTTPError(http.StatusForbidden, "Login failed") // 403
 }
 
 func NewAccessDenied() error {
-	return NewHTTPError(http.StatusForbidden, "Access denied")
+	return NewHTTPError(http.StatusForbidden, "Access denied") // 403
 }
 
-func NewAlreadyUploadedError() error {
-	return NewHTTPError(http.StatusOK, "Already uploaded")
+func NewAlreadyUploadedByMeError() error {
+	return NewHTTPError(http.StatusOK, "Already uploaded") // 200
+}
+
+func NewAlreadyUploadedAnotherError() error {
+	return NewHTTPError(http.StatusConflict, "Already uploaded") // 200
 }
 
 func NewNotEnoughMoneyError() error {
 	return NewHTTPError(402, "I need more gold!")
+}
+
+func NewOrderNumberError() error {
+	return NewHTTPError(http.StatusUnprocessableEntity, "Order number incorrect") // 422
 }

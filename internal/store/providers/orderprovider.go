@@ -9,7 +9,7 @@ import (
 type OrderRepositoryProvider interface {
 	Orders(context.Context, int) ([]model.Order, error)
 	UploadOrders(context.Context, *model.Order) error
-	GetNewOrdersID(context.Context) ([]int, error)
-	SetStatus(context.Context, int, string) error
-	SetAccrual(context.Context, int, int) error
+	GetNewOrdersID() ([]int, error)
+	SetStatus(int, string) error
+	SetAccrual(int, int) error
 }

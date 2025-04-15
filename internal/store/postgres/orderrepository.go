@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
@@ -28,6 +29,10 @@ func (r *OrderRepository) Orders(ctx context.Context, userID int) ([]model.Order
 	}
 	defer rows.Close()
 
+	if err := rows.Err(); err != nil {
+		return []model.Order{}, httperrors.NewServerError(err)
+	}
+
 	var result []model.Order
 
 	for rows.Next() {
@@ -38,6 +43,7 @@ func (r *OrderRepository) Orders(ctx context.Context, userID int) ([]model.Order
 			return []model.Order{}, httperrors.NewServerError(err)
 		}
 
+		o.Accrual /= 100
 		result = append(result, o)
 	}
 
@@ -46,8 +52,12 @@ func (r *OrderRepository) Orders(ctx context.Context, userID int) ([]model.Order
 
 // UploadOrders ...
 func (r *OrderRepository) UploadOrders(ctx context.Context, o *model.Order) error {
-	if err := o.CreateValidate(); err != nil {
+	if err := o.UploadOrderValidate(); err != nil {
 		return httperrors.NewValidationError(err)
+	}
+
+	if !o.LuhnCheck(o.ID) {
+		return httperrors.NewOrderNumberError()
 	}
 
 	var newID int
@@ -58,26 +68,41 @@ func (r *OrderRepository) UploadOrders(ctx context.Context, o *model.Order) erro
 		o.UserID,
 	).Scan(&newID)
 
-	fmt.Println(newID)
-
-	if newID == 0 {
-		return httperrors.NewAlreadyUploadedError()
+	if newID > 0 {
+		return nil
 	}
 
-	return nil
+	var userID int
+	r.db.QueryRowContext(
+		ctx,
+		"select user_id from orders where id=$1",
+		o.ID,
+	).Scan(&userID)
+
+	if userID == o.UserID {
+		return httperrors.NewAlreadyUploadedByMeError()
+	}
+
+	return httperrors.NewAlreadyUploadedAnotherError()
 }
 
 // GetNewOrdersID ...
-func (r *OrderRepository) GetNewOrdersID(ctx context.Context) ([]int, error) {
+func (r *OrderRepository) GetNewOrdersID() ([]int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 
 	rows, err := r.db.QueryContext(
 		ctx,
 		"select id from orders where status='NEW'",
 	)
 	if err != nil {
-		return nil, errors.New("Orders select error")
+		return nil, errors.New("orders select error")
 	}
 	defer rows.Close()
+
+	if err := rows.Err(); err != nil {
+		return []int{}, httperrors.NewServerError(err)
+	}
 
 	var result []int
 
@@ -86,7 +111,7 @@ func (r *OrderRepository) GetNewOrdersID(ctx context.Context) ([]int, error) {
 		err := rows.Scan(&id)
 
 		if err != nil {
-			return nil, errors.New("Order Scan error")
+			return nil, errors.New("order Scan error")
 		}
 
 		result = append(result, id)
@@ -96,7 +121,13 @@ func (r *OrderRepository) GetNewOrdersID(ctx context.Context) ([]int, error) {
 }
 
 // SetStatus ...
-func (r *OrderRepository) SetStatus(ctx context.Context, id int, status string) error {
+func (r *OrderRepository) SetStatus(id int, status string) error {
+
+	fmt.Println("SetStatus", id, status)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
 	_, err := r.db.ExecContext(
 		ctx,
 		"update orders set status=$1 where id=$2",
@@ -105,14 +136,19 @@ func (r *OrderRepository) SetStatus(ctx context.Context, id int, status string) 
 	)
 
 	if err != nil {
-		return errors.New("Order change status error")
+		return errors.New("order change status error")
 	}
 
 	return nil
 }
 
 // SetAccrual ...
-func (r *OrderRepository) SetAccrual(ctx context.Context, id int, accrual int) error {
+func (r *OrderRepository) SetAccrual(id int, accrual int) error {
+
+	fmt.Println("SetAccrual", id, accrual)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
 
 	var userID int
 	var balance int
@@ -148,20 +184,20 @@ func (r *OrderRepository) SetAccrual(ctx context.Context, id int, accrual int) e
 
 	if err != nil {
 		tx.Rollback()
-		return errors.New("Order change status error")
+		return errors.New("urder change status error")
 	}
 
 	// Change user balance
 	_, err = tx.ExecContext(
 		ctx,
-		"update users set balance=$1 where id=$3",
+		"update users set balance=$1 where id=$2",
 		balance+accrual,
 		userID,
 	)
 
 	if err != nil {
 		tx.Rollback()
-		return errors.New("User change balance error")
+		return errors.New("user change balance error")
 	}
 
 	tx.Commit()

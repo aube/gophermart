@@ -1,7 +1,6 @@
 package client
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"strconv"
@@ -12,32 +11,28 @@ import (
 
 // NewServicePolling ...
 func NewServicePolling(store store.Store, accSystemAddress string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
-	defer cancel()
+	// Create iterator for send orders to loyalty program
+
+	go func() {
+		for range time.Tick(108 * time.Millisecond) {
+			sendOrderToService(store, accSystemAddress)
+		}
+	}()
 
 	// Receive new orders and fill queue
-	orders, err := store.Order.GetNewOrdersID(ctx)
+	orders, err := store.Order.GetNewOrdersID()
 	if err != nil {
 		return err
 	}
 
-	for id := range orders {
+	for _, id := range orders {
 		store.OrdersQueue.Enqueue(id)
 	}
-
-	// Create iterator for send orders to loyalty program
-	setInterval(1*time.Second, func() {
-		sendOrderToService(store, accSystemAddress)
-	})
 
 	return nil
 }
 
 func sendOrderToService(store store.Store, accSystemAddress string) {
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
-	defer cancel()
-
-	fmt.Println("Tick at", time.Now().Format("15:04:05"))
 	if store.OrdersQueue.IsEmpty() {
 		return
 	}
@@ -47,47 +42,32 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 		return
 	}
 
-	err = store.Order.SetStatus(ctx, id, "PROCESSING")
+	fmt.Println("Dequeue order", id)
+
+	err = store.Order.SetStatus(id, "PROCESSING")
 	if err != nil {
 		store.OrdersQueue.Enqueue(id)
 		return
 	}
 
-	oa, err := request(accSystemAddress + "/" + strconv.Itoa(id))
+	oa, err := request(accSystemAddress + "/api/orders/" + strconv.Itoa(id))
 
-	if errors.Is(err, errors.New("NEW")) {
-		store.Order.SetStatus(ctx, id, "NEW")
+	fmt.Println("oa", oa)
+
+	if errors.Is(err, errors.New("new")) {
+		store.Order.SetStatus(id, "NEW")
 		return
 	}
 
-	if errors.Is(err, errors.New("INVALID")) {
-		store.Order.SetStatus(ctx, id, "INVALID")
+	if errors.Is(err, errors.New("invalid")) {
+		store.Order.SetStatus(id, "INVALID")
 		return
 	}
 
 	if oa.Status == "INVALID" {
-		store.Order.SetStatus(ctx, id, "INVALID")
+		store.Order.SetStatus(id, "INVALID")
 		return
 	}
 
-	store.Order.SetAccrual(ctx, id, oa.Accrual)
-}
-
-func setInterval(interval time.Duration, action func()) chan bool {
-	ticker := time.NewTicker(interval)
-	stopChan := make(chan bool)
-
-	go func() {
-		for {
-			select {
-			case <-ticker.C:
-				action()
-			case <-stopChan:
-				ticker.Stop()
-				return
-			}
-		}
-	}()
-
-	return stopChan
+	store.Order.SetAccrual(id, oa.Accrual)
 }

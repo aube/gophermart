@@ -4,18 +4,22 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/aube/gophermart/internal/ctxkeys"
 	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
 )
 
 func (s *Server) UserOrders(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	userID := ctx.Value(ctxkeys.UserID).(int)
+
+	w.Header().Set("Content-Type", "application/json")
 
 	// Store
-	orders, err := s.store.Order.Orders(ctx, 313)
+	orders, err := s.store.Order.Orders(ctx, userID)
 
 	if err != nil {
-		s.logger.ErrorContext(ctx, "UploadUserOrders", "err", err)
+		s.logger.ErrorContext(ctx, "UserOrders", "err", err)
 
 		var heherr *httperrors.HTTPError
 		if errors.As(err, &heherr) {
@@ -28,7 +32,7 @@ func (s *Server) UserOrders(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(orders) == 0 {
-		http.Error(w, "No data", http.StatusNoContent)
+		w.WriteHeader(http.StatusNoContent)
 		return
 	}
 
@@ -40,9 +44,8 @@ func (s *Server) UserOrders(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(result)
 
-	s.logger.Debug("HandlerCreateUser", "Order uploaded", result)
+	s.logger.Debug("UserOrders", "User orders", orders)
 }

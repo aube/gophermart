@@ -3,7 +3,7 @@
 
 CREATE TABLE users (
     id serial not null primary key,
-    email varchar not null unique,
+    login varchar not null unique,
     encrypted_password varchar not null,
     balance bigint not null check (balance >= 0) default 0,
     withdrawn bigint not null check (withdrawn >= 0) default 0,
@@ -12,7 +12,7 @@ CREATE TABLE users (
     deleted boolean not null default false
 );
 
-create INDEX users_email on users (email);
+create INDEX users_login on users (login);
 
 create INDEX users_encrypted_password on users (encrypted_password);
 
@@ -30,7 +30,7 @@ EXECUTE FUNCTION update_updated_at();
 DROP TRIGGER users_updated_at_trigger ON users;
 
 drop INDEX users_encrypted_password;
-drop INDEX users_email;
+drop INDEX users_login;
 
 DROP TABLE users;
 

@@ -3,15 +3,22 @@ package api
 import (
 	"net/http"
 
+	"github.com/aube/gophermart/internal/ctxkeys"
 	"github.com/aube/gophermart/internal/model"
 )
 
 func (s *Server) UserBalance(w http.ResponseWriter, r *http.Request) {
-	// ctx := r.Context()
+	ctx := r.Context()
+	userID := ctx.Value(ctxkeys.UserID).(int)
 
 	user := model.User{
-		Balance:   111111,
-		Withdrawn: 111111,
+		ID: userID,
+	}
+
+	err := s.store.User.Balance(ctx, &user)
+	if err != nil {
+		http.Error(w, "Failed to get user balance", http.StatusInternalServerError)
+		return
 	}
 
 	balance := model.Balance{
@@ -29,4 +36,6 @@ func (s *Server) UserBalance(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	w.Write(json)
+
+	s.logger.Debug("UserBalance", "Balance", balance)
 }

@@ -3,7 +3,7 @@
 
 CREATE TABLE billing (
     id serial not null primary key,
-    order_id int not null,
+    order_id bigint not null,
     user_id int not null,
     amount bigint not null,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP

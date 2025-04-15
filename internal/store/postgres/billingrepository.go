@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
@@ -12,26 +13,6 @@ import (
 // BillingRepository ...
 type BillingRepository struct {
 	db *sql.DB
-}
-
-// Balance ...
-func (r *BillingRepository) Balance(ctx context.Context, u *model.User) (*model.User, error) {
-	if err := r.db.QueryRow(
-		"SELECT * FROM users WHERE user_id = $1",
-		u.ID,
-	).Scan(
-		&u.ID,
-		&u.Email,
-		&u.EncryptedPassword,
-	); err != nil {
-		if err == sql.ErrNoRows {
-			return nil, httperrors.NewRecordNotFound()
-		}
-
-		return nil, err
-	}
-
-	return u, nil
 }
 
 // BalanceWithdraw ...
@@ -48,8 +29,9 @@ func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withd
 	var newID int
 	err = tx.QueryRowContext(
 		ctx,
-		"insert into withdrawals set user_id = $1, amount = $2 RETURNING id",
+		"insert into billing (user_id, order_id, amount) values ($1, $2, $3) RETURNING id",
 		u.ID,
+		wd.OrderID,
 		wd.Amount,
 	).Scan(&newID)
 
@@ -57,29 +39,39 @@ func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withd
 		tx.Rollback()
 		return httperrors.NewServerError(err)
 	}
+	fmt.Println(wd)
 	if newID == 0 {
 		tx.Rollback()
-		return httperrors.NewServerError(errors.New("Withdraw error"))
+		return httperrors.NewServerError(errors.New("withdraw error"))
 	}
 
-	err = tx.QueryRowContext(
+	_, err = tx.ExecContext(
 		ctx,
 		"update users set balance = $1, withdrawn = $2 where id = $3",
 		u.Balance-wd.Amount,
 		u.Withdrawn+wd.Amount,
 		u.ID,
-	).Scan(&newID)
+	)
+
+	fmt.Println(wd.Amount)
+	fmt.Println(u.Balance)
+	fmt.Println(u.Withdrawn)
+	fmt.Println(u.ID)
+	if err != nil {
+		tx.Rollback()
+		return httperrors.NewServerError(err)
+	}
 
 	return tx.Commit()
 
 }
 
 // Withdrawals ...
-func (r *BillingRepository) Withdrawals(ctx context.Context, u *model.User) ([]model.Withdraw, error) {
+func (r *BillingRepository) Withdrawals(ctx context.Context, userID int) ([]model.Withdraw, error) {
 	rows, err := r.db.QueryContext(
 		ctx,
-		"select order_id, amount/100 as sum, created_at from billing where user_id=$1",
-		u.ID,
+		"select order_id, amount, created_at from billing where user_id=$1",
+		userID,
 	)
 
 	if err != nil {
@@ -87,15 +79,21 @@ func (r *BillingRepository) Withdrawals(ctx context.Context, u *model.User) ([]m
 	}
 	defer rows.Close()
 
+	if err := rows.Err(); err != nil {
+		return []model.Withdraw{}, httperrors.NewServerError(err)
+	}
+
 	var result []model.Withdraw
 
 	for rows.Next() {
 		var wd model.Withdraw
-		err := rows.Scan(&wd.OrderID, &wd.Sum, &wd.ProcessedAt)
+		err := rows.Scan(&wd.OrderID, &wd.Amount, &wd.ProcessedAt)
 
 		if err != nil {
 			return []model.Withdraw{}, httperrors.NewServerError(err)
 		}
+
+		wd.Sum = float64(wd.Amount) / 100
 
 		result = append(result, wd)
 	}
