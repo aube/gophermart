@@ -43,7 +43,7 @@ func (s *Server) UserLogin(w http.ResponseWriter, r *http.Request) {
 		if errors.As(err, &heherr) {
 			http.Error(w, heherr.Message, heherr.Code)
 		} else {
-			http.Error(w, "Failed to create user", http.StatusInternalServerError)
+			http.Error(w, "Login failed", http.StatusInternalServerError)
 		}
 
 		return

@@ -31,11 +31,12 @@ func (s *Server) AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
 
 		user, ok := s.store.ActiveUser.Get(r.Context(), token)
 
-		if ok {
-			ctx := context.WithValue(r.Context(), ctxkeys.UserID, user.ID)
-			next.ServeHTTP(w, r.WithContext(ctx))
+		if !ok {
+			http.Error(w, "Auth failed", http.StatusUnauthorized)
+			return
 		}
 
-		http.Error(w, "Auth failed", http.StatusUnauthorized)
+		ctx := context.WithValue(r.Context(), ctxkeys.UserID, user.ID)
+		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }

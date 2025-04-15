@@ -3,6 +3,7 @@ package postgres
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 
 	"github.com/aube/gophermart/internal/httperrors"
@@ -62,6 +63,108 @@ func (r *OrderRepository) UploadOrders(ctx context.Context, o *model.Order) erro
 	if newID == 0 {
 		return httperrors.NewAlreadyUploadedError()
 	}
+
+	return nil
+}
+
+// GetNewOrdersID ...
+func (r *OrderRepository) GetNewOrdersID(ctx context.Context) ([]int, error) {
+
+	rows, err := r.db.QueryContext(
+		ctx,
+		"select id from orders where status='NEW'",
+	)
+	if err != nil {
+		return nil, errors.New("Orders select error")
+	}
+	defer rows.Close()
+
+	var result []int
+
+	for rows.Next() {
+		var id int
+		err := rows.Scan(&id)
+
+		if err != nil {
+			return nil, errors.New("Order Scan error")
+		}
+
+		result = append(result, id)
+	}
+
+	return result, nil
+}
+
+// SetStatus ...
+func (r *OrderRepository) SetStatus(ctx context.Context, id int, status string) error {
+	_, err := r.db.ExecContext(
+		ctx,
+		"update orders set status=$1 where id=$2",
+		status,
+		id,
+	)
+
+	if err != nil {
+		return errors.New("Order change status error")
+	}
+
+	return nil
+}
+
+// SetAccrual ...
+func (r *OrderRepository) SetAccrual(ctx context.Context, id int, accrual int) error {
+
+	var userID int
+	var balance int
+
+	// Select user data by order_id
+	if err := r.db.QueryRow(
+		`SELECT o.user_id as userID, u.balance as balance
+		FROM orders as o
+		LEFT JOIN users as u ON o.user_id = u.id
+		WHERE o.id = $1`,
+		id,
+	).Scan(
+		&userID,
+		&balance,
+	); err != nil {
+		return err
+	}
+
+	// TX begin
+	tx, err := r.db.Begin()
+	if err != nil {
+		return httperrors.NewServerError(err)
+	}
+
+	// Change order status and accrual
+	_, err = tx.ExecContext(
+		ctx,
+		"update orders set status=$1, accrual=$2 where id=$3",
+		"PROCESSED",
+		accrual,
+		id,
+	)
+
+	if err != nil {
+		tx.Rollback()
+		return errors.New("Order change status error")
+	}
+
+	// Change user balance
+	_, err = tx.ExecContext(
+		ctx,
+		"update users set balance=$1 where id=$3",
+		balance+accrual,
+		userID,
+	)
+
+	if err != nil {
+		tx.Rollback()
+		return errors.New("User change balance error")
+	}
+
+	tx.Commit()
 
 	return nil
 }

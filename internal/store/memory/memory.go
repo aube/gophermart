@@ -8,6 +8,7 @@ import (
 // Store ...
 type MemoryStore struct {
 	mem map[string]*model.User
+	oq  []int
 }
 
 // ActiveUser ...
@@ -17,9 +18,17 @@ func (s *MemoryStore) ActiveUser() providers.ActiveUserRepositoryProvider {
 	}
 }
 
+// OrdersQueue ...
+func (s *MemoryStore) OrdersQueue() providers.OrdersQueueRepositoryProvider {
+	return &OrdersQueueRepository{
+		oq: s.oq,
+	}
+}
+
 // New ...
 func New() *MemoryStore {
 	return &MemoryStore{
 		mem: make(map[string]*model.User),
+		oq:  []int{},
 	}
 }

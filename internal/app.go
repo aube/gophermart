@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/aube/gophermart/internal/api"
+	"github.com/aube/gophermart/internal/client"
 	"github.com/aube/gophermart/internal/store"
 )
 
@@ -16,6 +17,8 @@ func Start() error {
 	if err != nil {
 		panic(err)
 	}
+
+	client.NewServicePolling(store, config.AccrualSystemAddress)
 
 	mux := api.NewRouter(store)
 
