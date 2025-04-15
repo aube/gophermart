@@ -57,9 +57,10 @@ func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withd
 		tx.Rollback()
 		return httperrors.NewServerError(err)
 	}
+
 	if newID == 0 {
 		tx.Rollback()
-		return httperrors.NewServerError(errors.New("Withdraw error"))
+		return httperrors.NewServerError(errors.New("withdraw error"))
 	}
 
 	err = tx.QueryRowContext(
@@ -69,6 +70,11 @@ func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withd
 		u.Withdrawn+wd.Amount,
 		u.ID,
 	).Scan(&newID)
+
+	if err != nil {
+		tx.Rollback()
+		return httperrors.NewServerError(err)
+	}
 
 	return tx.Commit()
 
@@ -86,6 +92,10 @@ func (r *BillingRepository) Withdrawals(ctx context.Context, u *model.User) ([]m
 		return []model.Withdraw{}, httperrors.NewServerError(err)
 	}
 	defer rows.Close()
+
+	if err := rows.Err(); err != nil {
+		return []model.Withdraw{}, httperrors.NewServerError(err)
+	}
 
 	var result []model.Withdraw
 
