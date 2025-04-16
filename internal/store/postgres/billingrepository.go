@@ -14,26 +14,6 @@ type BillingRepository struct {
 	db *sql.DB
 }
 
-// Balance ...
-func (r *BillingRepository) Balance(ctx context.Context, u *model.User) (*model.User, error) {
-	if err := r.db.QueryRow(
-		"SELECT * FROM users WHERE user_id = $1",
-		u.ID,
-	).Scan(
-		&u.ID,
-		&u.Login,
-		&u.EncryptedPassword,
-	); err != nil {
-		if err == sql.ErrNoRows {
-			return nil, httperrors.NewRecordNotFound()
-		}
-
-		return nil, err
-	}
-
-	return u, nil
-}
-
 // BalanceWithdraw ...
 func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withdraw, u *model.User) error {
 	if u.Balance < wd.Amount {
@@ -81,11 +61,11 @@ func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withd
 }
 
 // Withdrawals ...
-func (r *BillingRepository) Withdrawals(ctx context.Context, u *model.User) ([]model.Withdraw, error) {
+func (r *BillingRepository) Withdrawals(ctx context.Context, userID int) ([]model.Withdraw, error) {
 	rows, err := r.db.QueryContext(
 		ctx,
 		"select order_id, amount/100 as sum, created_at from billing where user_id=$1",
-		u.ID,
+		userID,
 	)
 
 	if err != nil {

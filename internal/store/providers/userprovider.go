@@ -9,4 +9,5 @@ import (
 type UserRepositoryProvider interface {
 	Register(context.Context, *model.User) error
 	Login(context.Context, *model.User) (*model.User, error)
+	Balance(context.Context, *model.User) error
 }

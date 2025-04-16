@@ -7,7 +7,6 @@ import (
 )
 
 type BillingRepositoryProvider interface {
-	Balance(context.Context, *model.User) (*model.User, error)
-	Withdrawals(ctx context.Context, u *model.User) ([]model.Withdraw, error)
+	Withdrawals(context.Context, int) ([]model.Withdraw, error)
 	BalanceWithdraw(context.Context, *model.Withdraw, *model.User) error
 }

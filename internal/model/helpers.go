@@ -92,6 +92,12 @@ func OrdersToJSON(orders []Order) ([]byte, error) {
 	return jsonData, err
 }
 
+func WithdrawalsToJSON(wds []Withdraw) ([]byte, error) {
+	jsonData, err := json.Marshal(wds)
+
+	return jsonData, err
+}
+
 func BalanceToJSON(balance Balance) ([]byte, error) {
 	jsonData, err := json.Marshal(balance)
 

@@ -70,28 +70,20 @@ func (r *UserRepository) Login(ctx context.Context, u *model.User) (*model.User,
 }
 
 // Balance ...
-func (r *UserRepository) Balance(ctx context.Context, u *model.User) (*model.User, error) {
-	if err := u.Validate(); err != nil {
-		return nil, err
-	}
-
+func (r *UserRepository) Balance(ctx context.Context, u *model.User) error {
 	if err := r.db.QueryRow(
-		"SELECT id, encrypted_password FROM users WHERE login = $1",
-		u.Login,
+		"SELECT balance, withdrawn FROM users WHERE id = $1",
+		u.ID,
 	).Scan(
-		&u.ID,
-		&u.EncryptedPassword,
+		&u.Balance,
+		&u.Withdrawn,
 	); err != nil {
 		if err == sql.ErrNoRows {
-			return nil, httperrors.NewRecordNotFound()
+			return httperrors.NewRecordNotFound()
 		}
 
-		return nil, err
+		return err
 	}
 
-	if !u.ComparePassword(u.Password) {
-		return nil, httperrors.NewLoginFailed()
-	}
-
-	return u, nil
+	return nil
 }
