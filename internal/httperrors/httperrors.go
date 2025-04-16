@@ -55,3 +55,7 @@ func NewAlreadyUploadedError() error {
 func NewNotEnoughMoneyError() error {
 	return NewHTTPError(402, "I need more gold!")
 }
+
+func NewOrderNumberError() error {
+	return NewHTTPError(http.StatusUnprocessableEntity, "Order number incorrect") // 422
+}
