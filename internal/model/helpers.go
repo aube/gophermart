@@ -63,7 +63,7 @@ func ParseCredentials(requestBody []byte) (User, error) {
 	return user, nil
 }
 
-func ParseOrderID(requestBody []byte) (Order, error) {
+func ParseOrderID(requestBody []byte, userID int) (Order, error) {
 	id, err := strconv.Atoi(string(requestBody))
 	if err != nil {
 		return Order{}, err
@@ -71,7 +71,7 @@ func ParseOrderID(requestBody []byte) (Order, error) {
 
 	return Order{
 		ID:     id,
-		UserID: "33",
+		UserID: userID,
 	}, nil
 }
 

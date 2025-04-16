@@ -5,12 +5,14 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/aube/gophermart/internal/ctxkeys"
 	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
 )
 
 func (s *Server) UploadUserOrders(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	userID := ctx.Value(ctxkeys.UserID).(int)
 
 	if r.Body == nil || r.ContentLength == 0 {
 		s.logger.ErrorContext(ctx, "UploadUserOrders", "Request body is empty", "")
@@ -27,7 +29,7 @@ func (s *Server) UploadUserOrders(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// OrderID
-	order, err := model.ParseOrderID(body)
+	order, err := model.ParseOrderID(body, userID)
 	if err != nil {
 		s.logger.ErrorContext(ctx, "UploadUserOrders", "err", err)
 		http.Error(w, "Failed to convert body to uint64", http.StatusBadRequest)

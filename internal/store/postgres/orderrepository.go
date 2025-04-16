@@ -50,7 +50,7 @@ func (r *OrderRepository) Orders(ctx context.Context, userID int) ([]model.Order
 
 // UploadOrders ...
 func (r *OrderRepository) UploadOrders(ctx context.Context, o *model.Order) error {
-	if err := o.CreateValidate(); err != nil {
+	if err := o.UploadOrderValidate(); err != nil {
 		return httperrors.NewValidationError(err)
 	}
 
