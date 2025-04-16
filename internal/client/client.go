@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strconv"
 	"time"
 
@@ -46,6 +47,8 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 		return
 	}
 
+	fmt.Println("Dequeue", id)
+
 	err = store.Order.SetStatus(ctx, id, "PROCESSING")
 	if err != nil {
 		store.OrdersQueue.Enqueue(id)
@@ -53,6 +56,8 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 	}
 
 	oa, err := request(accSystemAddress + "/" + strconv.Itoa(id))
+
+	fmt.Println("Reqest", oa)
 
 	if errors.Is(err, errors.New("new")) {
 		store.Order.SetStatus(ctx, id, "NEW")

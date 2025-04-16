@@ -54,5 +54,5 @@ func (s *Server) UploadUserOrders(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("Order uploaded"))
 
-	s.logger.Debug("HandlerCreateUser", "Order uploaded", order.ID)
+	s.logger.Debug("UploadUserOrders", "Order uploaded", order.ID)
 }
