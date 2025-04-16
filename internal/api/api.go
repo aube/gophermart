@@ -39,4 +39,7 @@ func (s *Server) configureRouter() {
 	s.router.HandleFunc(`POST /api/user/orders`, s.AuthMiddleware(s.UploadUserOrders))
 	s.router.HandleFunc(`GET /api/user/withdrawals`, s.AuthMiddleware(s.UserWithdrawals))
 	s.router.HandleFunc(`POST /api/user/balance/withdraw`, s.AuthMiddleware(s.UserBalanceWithdraw))
+
+	// Manual debug
+	s.router.HandleFunc(`POST /api/user/orders/accrual`, s.AuthMiddleware(s.UploadUserOrdersAccrual))
 }

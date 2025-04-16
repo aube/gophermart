@@ -8,6 +8,15 @@ import (
 	"net/http"
 )
 
+// OrderAccrual ...
+type OrderAccrual struct {
+	ID      int     `json:"order"`
+	Sum     float64 `json:"accrual"`
+	Accrual int     `json:"-"`
+	Status  string  `json:"status"`
+}
+
+// ParseOrderAccrual ...
 func ParseOrderAccrual(requestBody []byte) (OrderAccrual, error) {
 	var oa OrderAccrual
 
@@ -15,15 +24,9 @@ func ParseOrderAccrual(requestBody []byte) (OrderAccrual, error) {
 	if err != nil {
 		return OrderAccrual{}, err
 	}
+	oa.Accrual = int(oa.Sum + 100)
 
 	return oa, nil
-}
-
-// User ...
-type OrderAccrual struct {
-	ID      int    `json:"order"`
-	Accrual int    `json:"accrual"`
-	Status  string `json:"status"`
 }
 
 // Request ...

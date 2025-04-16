@@ -162,7 +162,7 @@ func (r *OrderRepository) SetAccrual(ctx context.Context, id int, accrual int) e
 	// Change user balance
 	_, err = tx.ExecContext(
 		ctx,
-		"update users set balance=$1 where id=$3",
+		"update users set balance=$1 where id=$2",
 		balance+accrual,
 		userID,
 	)
