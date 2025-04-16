@@ -25,7 +25,7 @@ func NewServicePolling(store store.Store, accSystemAddress string) error {
 	}
 
 	// Create iterator for send orders to loyalty program
-	setInterval(1*time.Second, func() {
+	setInterval(108*time.Millisecond, func() {
 		sendOrderToService(store, accSystemAddress)
 	})
 
