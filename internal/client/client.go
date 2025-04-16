@@ -1,7 +1,6 @@
 package client
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"strconv"
@@ -12,16 +11,13 @@ import (
 
 // NewServicePolling ...
 func NewServicePolling(store store.Store, accSystemAddress string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
-	defer cancel()
-
 	// Create iterator for send orders to loyalty program
 	setInterval(108*time.Millisecond, func() {
 		sendOrderToService(store, accSystemAddress)
 	})
 
 	// Receive new orders and fill queue
-	orders, err := store.Order.GetNewOrdersID(ctx)
+	orders, err := store.Order.GetNewOrdersID()
 	if err != nil {
 		return err
 	}
@@ -34,11 +30,8 @@ func NewServicePolling(store store.Store, accSystemAddress string) error {
 }
 
 func sendOrderToService(store store.Store, accSystemAddress string) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-
-	// fmt.Println("Tick at", time.Now().Format("15:04:05"))
 	if store.OrdersQueue.IsEmpty() {
+		fmt.Println("Tick in OrdersQueue.IsEmpty")
 		return
 	}
 
@@ -49,7 +42,7 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 
 	fmt.Println("Dequeue order", id)
 
-	err = store.Order.SetStatus(ctx, id, "PROCESSING")
+	err = store.Order.SetStatus(id, "PROCESSING")
 	if err != nil {
 		store.OrdersQueue.Enqueue(id)
 		return
@@ -58,21 +51,21 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 	oa, err := request(accSystemAddress + "/api/orders/" + strconv.Itoa(id))
 
 	if errors.Is(err, errors.New("new")) {
-		store.Order.SetStatus(ctx, id, "NEW")
+		store.Order.SetStatus(id, "NEW")
 		return
 	}
 
 	if errors.Is(err, errors.New("invalid")) {
-		store.Order.SetStatus(ctx, id, "INVALID")
+		store.Order.SetStatus(id, "INVALID")
 		return
 	}
 
 	if oa.Status == "INVALID" {
-		store.Order.SetStatus(ctx, id, "INVALID")
+		store.Order.SetStatus(id, "INVALID")
 		return
 	}
 
-	store.Order.SetAccrual(ctx, id, oa.Accrual)
+	store.Order.SetAccrual(id, oa.Accrual)
 }
 
 func setInterval(interval time.Duration, action func()) chan bool {

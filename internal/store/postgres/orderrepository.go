@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
@@ -66,8 +67,6 @@ func (r *OrderRepository) UploadOrders(ctx context.Context, o *model.Order) erro
 		o.UserID,
 	).Scan(&newID)
 
-	fmt.Println(newID)
-
 	if newID == 0 {
 		return httperrors.NewAlreadyUploadedError()
 	}
@@ -76,7 +75,9 @@ func (r *OrderRepository) UploadOrders(ctx context.Context, o *model.Order) erro
 }
 
 // GetNewOrdersID ...
-func (r *OrderRepository) GetNewOrdersID(ctx context.Context) ([]int, error) {
+func (r *OrderRepository) GetNewOrdersID() ([]int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
 
 	rows, err := r.db.QueryContext(
 		ctx,
@@ -108,7 +109,13 @@ func (r *OrderRepository) GetNewOrdersID(ctx context.Context) ([]int, error) {
 }
 
 // SetStatus ...
-func (r *OrderRepository) SetStatus(ctx context.Context, id int, status string) error {
+func (r *OrderRepository) SetStatus(id int, status string) error {
+
+	fmt.Println("SetStatus", id, status)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
 	_, err := r.db.ExecContext(
 		ctx,
 		"update orders set status=$1 where id=$2",
@@ -124,7 +131,12 @@ func (r *OrderRepository) SetStatus(ctx context.Context, id int, status string) 
 }
 
 // SetAccrual ...
-func (r *OrderRepository) SetAccrual(ctx context.Context, id int, accrual int) error {
+func (r *OrderRepository) SetAccrual(id int, accrual int) error {
+
+	fmt.Println("SetAccrual", id, accrual)
+
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
 
 	var userID int
 	var balance int

@@ -11,7 +11,7 @@ func (s *Server) UploadUserOrdersAccrual(w http.ResponseWriter, r *http.Request)
 	ctx := r.Context()
 
 	// Store
-	err := s.store.Order.SetAccrual(ctx, 123123123, 100000)
+	err := s.store.Order.SetAccrual(123123123, 100000)
 	if err != nil {
 		s.logger.ErrorContext(ctx, "UploadUserOrders", "err", err)
 

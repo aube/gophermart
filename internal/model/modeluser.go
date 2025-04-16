@@ -1,8 +1,6 @@
 package model
 
 import (
-	"fmt"
-
 	validation "github.com/go-ozzo/ozzo-validation"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -49,7 +47,6 @@ func (u *User) AfterLogin() error {
 	}
 	u.RandomHash = hash
 
-	fmt.Println(hash)
 	return nil
 }
 

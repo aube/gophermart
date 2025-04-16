@@ -47,5 +47,5 @@ func (s *Server) UserOrders(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(result)
 
-	s.logger.Debug("UserOrders", "Order uploaded", result)
+	s.logger.Debug("UserOrders", "User orders", orders)
 }
