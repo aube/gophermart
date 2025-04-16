@@ -31,7 +31,7 @@ func (s *Server) UserOrders(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if len(orders) == 0 {
-		http.Error(w, "No data", http.StatusNoContent)
+		w.WriteHeader(http.StatusNoContent)
 		return
 	}
 

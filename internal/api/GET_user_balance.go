@@ -17,6 +17,10 @@ func (s *Server) UserBalance(w http.ResponseWriter, r *http.Request) {
 	}
 
 	err := s.store.User.Balance(ctx, &user)
+	if err != nil {
+		http.Error(w, "Failed to get user balance", http.StatusInternalServerError)
+		return
+	}
 
 	balance := model.Balance{
 		Current:   float64(user.Balance) / 100,
