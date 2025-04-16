@@ -55,7 +55,8 @@ func (s *Server) UserLogin(w http.ResponseWriter, r *http.Request) {
 
 	setAuthCookie(w, user.RandomHash)
 
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Authorization", bearerString+user.RandomHash)
+
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(user.RandomHash))
 

@@ -28,8 +28,8 @@ func (r *UserRepository) Register(ctx context.Context, u *model.User) error {
 
 	err := r.db.QueryRowContext(
 		ctx,
-		"INSERT INTO users (email, encrypted_password) VALUES ($1, $2) ON CONFLICT (email) DO NOTHING RETURNING id",
-		u.Email,
+		"INSERT INTO users (login, encrypted_password) VALUES ($1, $2) ON CONFLICT (login) DO NOTHING RETURNING id",
+		u.Login,
 		u.EncryptedPassword,
 	).Scan(&u.ID)
 
@@ -49,8 +49,8 @@ func (r *UserRepository) Login(ctx context.Context, u *model.User) (*model.User,
 	}
 
 	if err := r.db.QueryRow(
-		"SELECT id, encrypted_password FROM users WHERE email = $1",
-		u.Email,
+		"SELECT id, encrypted_password FROM users WHERE login = $1",
+		u.Login,
 	).Scan(
 		&u.ID,
 		&u.EncryptedPassword,
@@ -76,8 +76,8 @@ func (r *UserRepository) Balance(ctx context.Context, u *model.User) (*model.Use
 	}
 
 	if err := r.db.QueryRow(
-		"SELECT id, encrypted_password FROM users WHERE email = $1",
-		u.Email,
+		"SELECT id, encrypted_password FROM users WHERE login = $1",
+		u.Login,
 	).Scan(
 		&u.ID,
 		&u.EncryptedPassword,

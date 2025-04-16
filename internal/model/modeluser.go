@@ -4,14 +4,13 @@ import (
 	"fmt"
 
 	validation "github.com/go-ozzo/ozzo-validation"
-	"github.com/go-ozzo/ozzo-validation/is"
 	"golang.org/x/crypto/bcrypt"
 )
 
 // User ...
 type User struct {
 	ID                int    `json:"id"`
-	Email             string `json:"email"`
+	Login             string `json:"login"`
 	Password          string `json:"password,omitempty"`
 	EncryptedPassword string `json:"-"`
 	RandomHash        string `json:"-"`
@@ -23,7 +22,7 @@ type User struct {
 func (u *User) Validate() error {
 	return validation.ValidateStruct(
 		u,
-		validation.Field(&u.Email, validation.Required, is.Email),
+		validation.Field(&u.Login, validation.Required),
 		validation.Field(&u.Password, validation.By(requiredIf(u.EncryptedPassword == "")), validation.Length(6, 100)),
 	)
 }

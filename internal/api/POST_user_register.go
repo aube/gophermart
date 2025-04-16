@@ -49,6 +49,14 @@ func (s *Server) UserRegister(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	user.AfterLogin()
+
+	s.store.ActiveUser.Set(ctx, &user)
+
+	setAuthCookie(w, user.RandomHash)
+
+	w.Header().Set("Authorization", bearerString+user.RandomHash)
+
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("User registered"))
 

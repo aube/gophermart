@@ -49,6 +49,8 @@ func (s *Server) UploadUserOrders(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	s.store.OrdersQueue.Enqueue(order.ID)
+
 	w.WriteHeader(http.StatusAccepted)
 	w.Write([]byte("Order uploaded"))
 

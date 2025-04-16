@@ -21,7 +21,7 @@ func (r *BillingRepository) Balance(ctx context.Context, u *model.User) (*model.
 		u.ID,
 	).Scan(
 		&u.ID,
-		&u.Email,
+		&u.Login,
 		&u.EncryptedPassword,
 	); err != nil {
 		if err == sql.ErrNoRows {
