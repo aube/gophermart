@@ -11,10 +11,11 @@ import (
 
 func (s *Server) UserOrders(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	userID := ctx.Value(ctxkeys.UserID).(int)
+
 	w.Header().Set("Content-Type", "application/json")
 
 	// Store
-	userID := ctx.Value(ctxkeys.UserID).(int)
 	orders, err := s.store.Order.Orders(ctx, userID)
 
 	if err != nil {

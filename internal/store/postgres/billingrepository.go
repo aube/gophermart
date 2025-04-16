@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 
 	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
@@ -28,7 +29,7 @@ func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withd
 	var newID int
 	err = tx.QueryRowContext(
 		ctx,
-		"insert into withdrawals set user_id = $1, amount = $2 RETURNING id",
+		"insert into billing (user_id, amount) values ($1, $2) RETURNING id",
 		u.ID,
 		wd.Amount,
 	).Scan(&newID)
@@ -37,20 +38,24 @@ func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withd
 		tx.Rollback()
 		return httperrors.NewServerError(err)
 	}
-
+	fmt.Println(wd)
 	if newID == 0 {
 		tx.Rollback()
 		return httperrors.NewServerError(errors.New("withdraw error"))
 	}
 
-	err = tx.QueryRowContext(
+	_, err = tx.ExecContext(
 		ctx,
 		"update users set balance = $1, withdrawn = $2 where id = $3",
 		u.Balance-wd.Amount,
 		u.Withdrawn+wd.Amount,
 		u.ID,
-	).Scan(&newID)
+	)
 
+	fmt.Println(wd.Amount)
+	fmt.Println(u.Balance)
+	fmt.Println(u.Withdrawn)
+	fmt.Println(u.ID)
 	if err != nil {
 		tx.Rollback()
 		return httperrors.NewServerError(err)

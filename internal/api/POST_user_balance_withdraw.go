@@ -2,15 +2,18 @@ package api
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 
+	"github.com/aube/gophermart/internal/ctxkeys"
 	"github.com/aube/gophermart/internal/httperrors"
 	"github.com/aube/gophermart/internal/model"
 )
 
 func (s *Server) UserBalanceWithdraw(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
+	userID := ctx.Value(ctxkeys.UserID).(int)
 
 	if r.Body == nil || r.ContentLength == 0 {
 		s.logger.ErrorContext(ctx, "UserBalanceWithdraw", "Request body is empty", "")
@@ -33,7 +36,13 @@ func (s *Server) UserBalanceWithdraw(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := model.User{}
+	user := model.User{
+		ID: userID,
+	}
+	s.store.User.Balance(ctx, &user)
+
+	fmt.Println(wd)
+
 	// Store
 	err = s.store.Billing.BalanceWithdraw(ctx, &wd, &user)
 	if err != nil {

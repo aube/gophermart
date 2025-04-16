@@ -82,6 +82,7 @@ func ParseWithdraw(requestBody []byte) (Withdraw, error) {
 	if err != nil {
 		return Withdraw{}, err
 	}
+	wd.Amount = int64(wd.Sum * 100)
 
 	return wd, nil
 }

@@ -9,7 +9,6 @@ import (
 
 func (s *Server) UserBalance(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
-
 	userID := ctx.Value(ctxkeys.UserID).(int)
 
 	user := model.User{

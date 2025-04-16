@@ -3,7 +3,6 @@ package client
 import (
 	"context"
 	"errors"
-	"fmt"
 	"strconv"
 	"time"
 
@@ -37,7 +36,7 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	fmt.Println("Tick at", time.Now().Format("15:04:05"))
+	// fmt.Println("Tick at", time.Now().Format("15:04:05"))
 	if store.OrdersQueue.IsEmpty() {
 		return
 	}
