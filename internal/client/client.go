@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strconv"
@@ -31,7 +32,6 @@ func NewServicePolling(store store.Store, accSystemAddress string) error {
 
 func sendOrderToService(store store.Store, accSystemAddress string) {
 	if store.OrdersQueue.IsEmpty() {
-		fmt.Println("Tick in OrdersQueue.IsEmpty")
 		return
 	}
 
@@ -68,21 +68,21 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 	store.Order.SetAccrual(id, oa.Accrual)
 }
 
-func setInterval(interval time.Duration, action func()) chan bool {
+func setInterval(interval time.Duration, action func()) {
+	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
+	defer cancel()
+
 	ticker := time.NewTicker(interval)
-	stopChan := make(chan bool)
+	defer ticker.Stop()
 
 	go func() {
 		for {
 			select {
 			case <-ticker.C:
 				action()
-			case <-stopChan:
-				ticker.Stop()
+			case <-ctx.Done():
 				return
 			}
 		}
 	}()
-
-	return stopChan
 }
