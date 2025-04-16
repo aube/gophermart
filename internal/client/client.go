@@ -55,7 +55,7 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 		return
 	}
 
-	oa, err := request(accSystemAddress + "/" + strconv.Itoa(id))
+	oa, err := request(accSystemAddress + "/api/orders/" + strconv.Itoa(id))
 
 	fmt.Println("Reqest", oa)
 

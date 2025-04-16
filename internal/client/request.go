@@ -33,7 +33,7 @@ func ParseOrderAccrual(requestBody []byte) (OrderAccrual, error) {
 func request(address string) (OrderAccrual, error) {
 	resp, err := http.Get(address)
 	if err != nil {
-		log.Fatalln(err)
+		log.Println(err)
 	}
 	defer resp.Body.Close()
 
