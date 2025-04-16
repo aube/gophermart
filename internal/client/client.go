@@ -15,6 +15,11 @@ func NewServicePolling(store store.Store, accSystemAddress string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
+	// Create iterator for send orders to loyalty program
+	setInterval(108*time.Millisecond, func() {
+		sendOrderToService(store, accSystemAddress)
+	})
+
 	// Receive new orders and fill queue
 	orders, err := store.Order.GetNewOrdersID(ctx)
 	if err != nil {
@@ -25,16 +30,11 @@ func NewServicePolling(store store.Store, accSystemAddress string) error {
 		store.OrdersQueue.Enqueue(id)
 	}
 
-	// Create iterator for send orders to loyalty program
-	setInterval(108*time.Millisecond, func() {
-		sendOrderToService(store, accSystemAddress)
-	})
-
 	return nil
 }
 
 func sendOrderToService(store store.Store, accSystemAddress string) {
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	// fmt.Println("Tick at", time.Now().Format("15:04:05"))
@@ -47,7 +47,7 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 		return
 	}
 
-	fmt.Println("Dequeue", id)
+	fmt.Println("Dequeue order", id)
 
 	err = store.Order.SetStatus(ctx, id, "PROCESSING")
 	if err != nil {
@@ -56,8 +56,6 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 	}
 
 	oa, err := request(accSystemAddress + "/api/orders/" + strconv.Itoa(id))
-
-	fmt.Println("Reqest", oa)
 
 	if errors.Is(err, errors.New("new")) {
 		store.Order.SetStatus(ctx, id, "NEW")
