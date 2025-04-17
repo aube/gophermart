@@ -29,8 +29,9 @@ func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withd
 	var newID int
 	err = tx.QueryRowContext(
 		ctx,
-		"insert into billing (user_id, amount) values ($1, $2) RETURNING id",
+		"insert into billing (user_id, order_id, amount) values ($1, $2, $3) RETURNING id",
 		u.ID,
+		wd.OrderID,
 		wd.Amount,
 	).Scan(&newID)
 

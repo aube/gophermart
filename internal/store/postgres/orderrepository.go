@@ -43,6 +43,7 @@ func (r *OrderRepository) Orders(ctx context.Context, userID int) ([]model.Order
 			return []model.Order{}, httperrors.NewServerError(err)
 		}
 
+		o.Accrual /= 100
 		result = append(result, o)
 	}
 
