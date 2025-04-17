@@ -25,10 +25,7 @@ func NewServicePolling(store store.Store, accSystemAddress string) error {
 		return err
 	}
 
-	fmt.Println(orders)
-
 	for _, id := range orders {
-		fmt.Println(id)
 		store.OrdersQueue.Enqueue(id)
 	}
 

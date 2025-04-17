@@ -7,11 +7,13 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 // OrderAccrual ...
 type OrderAccrual struct {
-	ID      int     `json:"order"`
+	ID      int     `json:"-"`
+	OrderID string  `json:"order"`
 	Sum     float64 `json:"accrual"`
 	Accrual int     `json:"-"`
 	Status  string  `json:"status"`
@@ -26,6 +28,7 @@ func ParseOrderAccrual(requestBody []byte) (OrderAccrual, error) {
 		return OrderAccrual{}, err
 	}
 	oa.Accrual = int(oa.Sum + 100)
+	oa.ID, err = strconv.Atoi(oa.OrderID)
 
 	return oa, nil
 }
@@ -43,7 +46,7 @@ func request(address string) (OrderAccrual, error) {
 		return OrderAccrual{}, err
 	}
 
-	fmt.Println("body", body)
+	fmt.Println("body", string(body))
 
 	switch resp.StatusCode {
 	case 204:
