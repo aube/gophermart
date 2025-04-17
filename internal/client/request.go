@@ -29,6 +29,9 @@ func ParseOrderAccrual(requestBody []byte) (OrderAccrual, error) {
 	}
 	oa.Accrual = int(oa.Sum * 100)
 	oa.ID, err = strconv.Atoi(oa.OrderID)
+	if err != nil {
+		return OrderAccrual{}, err
+	}
 
 	return oa, nil
 }
