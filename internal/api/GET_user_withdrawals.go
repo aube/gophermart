@@ -17,7 +17,6 @@ func (s *Server) UserWithdrawals(w http.ResponseWriter, r *http.Request) {
 
 	// Store
 	wds, err := s.store.Billing.Withdrawals(ctx, userID)
-
 	if err != nil {
 		s.logger.ErrorContext(ctx, "UserWithdrawals", "err", err)
 

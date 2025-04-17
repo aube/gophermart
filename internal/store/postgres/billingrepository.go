@@ -70,7 +70,7 @@ func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withd
 func (r *BillingRepository) Withdrawals(ctx context.Context, userID int) ([]model.Withdraw, error) {
 	rows, err := r.db.QueryContext(
 		ctx,
-		"select order_id, amount/100 as sum, created_at from billing where user_id=$1",
+		"select order_id, amount, created_at from billing where user_id=$1",
 		userID,
 	)
 
@@ -87,11 +87,13 @@ func (r *BillingRepository) Withdrawals(ctx context.Context, userID int) ([]mode
 
 	for rows.Next() {
 		var wd model.Withdraw
-		err := rows.Scan(&wd.OrderID, &wd.Sum, &wd.ProcessedAt)
+		err := rows.Scan(&wd.OrderID, &wd.Amount, &wd.ProcessedAt)
 
 		if err != nil {
 			return []model.Withdraw{}, httperrors.NewServerError(err)
 		}
+
+		wd.Sum = float64(wd.Amount) / 100
 
 		result = append(result, wd)
 	}
