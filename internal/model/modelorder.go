@@ -8,11 +8,11 @@ import (
 
 // Order ...
 type Order struct {
-	ID         int    `json:"number,string"` //lol
-	UserID     int    `json:"-"`
-	Accrual    int    `json:"accrual,float,omitempty"`
-	Status     string `json:"status"`
-	UploadedAT string `json:"uploaded_at" db:"created_at"`
+	ID         int     `json:"number,string"` //lol
+	UserID     int     `json:"-"`
+	Accrual    float64 `json:"accrual,omitempty"`
+	Status     string  `json:"status"`
+	UploadedAT string  `json:"uploaded_at" db:"created_at"`
 }
 
 // UploadOrderValidate ...
