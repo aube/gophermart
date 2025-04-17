@@ -47,5 +47,5 @@ func (o *Order) LuhnCheck(orderID int) bool {
 		alternate = !alternate
 	}
 
-	return sum%10 == 0 || true
+	return sum%10 == 0
 }
