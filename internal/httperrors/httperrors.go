@@ -48,8 +48,12 @@ func NewAccessDenied() error {
 	return NewHTTPError(http.StatusForbidden, "Access denied") // 403
 }
 
-func NewAlreadyUploadedError() error {
+func NewAlreadyUploadedByMeError() error {
 	return NewHTTPError(http.StatusOK, "Already uploaded") // 200
+}
+
+func NewAlreadyUploadedAnotherError() error {
+	return NewHTTPError(http.StatusConflict, "Already uploaded") // 200
 }
 
 func NewNotEnoughMoneyError() error {
