@@ -1,7 +1,6 @@
 package client
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"strconv"
@@ -13,9 +12,12 @@ import (
 // NewServicePolling ...
 func NewServicePolling(store store.Store, accSystemAddress string) error {
 	// Create iterator for send orders to loyalty program
-	setInterval(108*time.Millisecond, func() {
-		sendOrderToService(store, accSystemAddress)
-	})
+
+	go func() {
+		for range time.Tick(108 * time.Millisecond) {
+			sendOrderToService(store, accSystemAddress)
+		}
+	}()
 
 	// Receive new orders and fill queue
 	orders, err := store.Order.GetNewOrdersID()
@@ -23,7 +25,10 @@ func NewServicePolling(store store.Store, accSystemAddress string) error {
 		return err
 	}
 
-	for id := range orders {
+	fmt.Println(orders)
+
+	for _, id := range orders {
+		fmt.Println(id)
 		store.OrdersQueue.Enqueue(id)
 	}
 
@@ -50,6 +55,8 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 
 	oa, err := request(accSystemAddress + "/api/orders/" + strconv.Itoa(id))
 
+	fmt.Println("oa", oa)
+
 	if errors.Is(err, errors.New("new")) {
 		store.Order.SetStatus(id, "NEW")
 		return
@@ -66,23 +73,4 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 	}
 
 	store.Order.SetAccrual(id, oa.Accrual)
-}
-
-func setInterval(interval time.Duration, action func()) {
-	ctx, cancel := context.WithTimeout(context.Background(), 120*time.Second)
-	defer cancel()
-
-	ticker := time.NewTicker(interval)
-	defer ticker.Stop()
-
-	go func() {
-		for {
-			select {
-			case <-ticker.C:
-				action()
-			case <-ctx.Done():
-				return
-			}
-		}
-	}()
 }

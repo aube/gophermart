@@ -14,7 +14,7 @@ var configPath = "configs/.env.gophermart"
 
 type envConfig struct {
 	ServerAddress         string `envconfig:"RUN_ADDRESS" default:"localhost:8080"`
-	LogLevel              string `envconfig:"LOG_LEVEL" default:"info"`
+	LogLevel              string `envconfig:"LOG_LEVEL" default:"debug"`
 	DatabaseDSN           string `envconfig:"DATABASE_URI"`
 	TokenSecret           string `envconfig:"TOKEN_SECRET"`
 	DefaultRequestTimeout string `envconfig:"DEFAULT_REQUEST_TIMEOUT"`

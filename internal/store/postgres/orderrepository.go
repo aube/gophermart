@@ -67,11 +67,22 @@ func (r *OrderRepository) UploadOrders(ctx context.Context, o *model.Order) erro
 		o.UserID,
 	).Scan(&newID)
 
-	if newID == 0 {
-		return httperrors.NewAlreadyUploadedError()
+	if newID > 0 {
+		return nil
 	}
 
-	return nil
+	var userID int
+	r.db.QueryRowContext(
+		ctx,
+		"select user_id from orders where id=$1",
+		o.ID,
+	).Scan(&userID)
+
+	if userID == o.UserID {
+		return httperrors.NewAlreadyUploadedByMeError()
+	}
+
+	return httperrors.NewAlreadyUploadedAnotherError()
 }
 
 // GetNewOrdersID ...

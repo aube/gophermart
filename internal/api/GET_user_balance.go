@@ -37,5 +37,5 @@ func (s *Server) UserBalance(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write(json)
 
-	s.logger.Debug("UserBalance", "Balance", json)
+	s.logger.Debug("UserBalance", "Balance", balance)
 }

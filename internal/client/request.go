@@ -3,6 +3,7 @@ package client
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -41,6 +42,8 @@ func request(address string) (OrderAccrual, error) {
 	if err != nil {
 		return OrderAccrual{}, err
 	}
+
+	fmt.Println("body", body)
 
 	switch resp.StatusCode {
 	case 204:
