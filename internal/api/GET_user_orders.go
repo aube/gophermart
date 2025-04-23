@@ -2,6 +2,7 @@ package api
 
 import (
 	"errors"
+	"log/slog"
 	"net/http"
 
 	"github.com/aube/gophermart/internal/ctxkeys"
@@ -9,43 +10,49 @@ import (
 	"github.com/aube/gophermart/internal/model"
 )
 
-func (s *Server) UserOrders(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-	userID := ctx.Value(ctxkeys.UserID).(int)
+func NewUserOrdersHanlder(
+	storeOrder OrderProvider,
+	logger *slog.Logger,
+) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	w.Header().Set("Content-Type", "application/json")
+		ctx := r.Context()
+		userID := ctx.Value(ctxkeys.UserID).(int)
 
-	// Store
-	orders, err := s.store.Order.Orders(ctx, userID)
+		w.Header().Set("Content-Type", "application/json")
 
-	if err != nil {
-		s.logger.ErrorContext(ctx, "UserOrders", "err", err)
+		// Store
+		orders, err := storeOrder.Orders(ctx, userID)
 
-		var heherr *httperrors.HTTPError
-		if errors.As(err, &heherr) {
-			http.Error(w, heherr.Message, heherr.Code)
-		} else {
-			http.Error(w, "Failed to read user orders", http.StatusInternalServerError)
+		if err != nil {
+			logger.ErrorContext(ctx, "UserOrders", "err", err)
+
+			var heherr *httperrors.HTTPError
+			if errors.As(err, &heherr) {
+				http.Error(w, heherr.Message, heherr.Code)
+			} else {
+				http.Error(w, "Failed to read user orders", http.StatusInternalServerError)
+			}
+
+			return
 		}
 
-		return
+		if len(orders) == 0 {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+
+		// JSON
+		result, err := model.OrdersToJSON(orders)
+
+		if err != nil {
+			http.Error(w, "Failed to convert user orders", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+		w.Write(result)
+
+		logger.Debug("UserOrders", "User orders", orders)
 	}
-
-	if len(orders) == 0 {
-		w.WriteHeader(http.StatusNoContent)
-		return
-	}
-
-	// JSON
-	result, err := model.OrdersToJSON(orders)
-
-	if err != nil {
-		http.Error(w, "Failed to convert user orders", http.StatusInternalServerError)
-		return
-	}
-
-	w.WriteHeader(http.StatusOK)
-	w.Write(result)
-
-	s.logger.Debug("UserOrders", "User orders", orders)
 }

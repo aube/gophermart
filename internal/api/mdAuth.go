@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"log/slog"
 	"net/http"
 
 	"github.com/aube/gophermart/internal/ctxkeys"
@@ -10,33 +11,40 @@ import (
 const authCookieName = "auth"
 const bearerString = "Bearer "
 
-func (s *Server) AuthMiddleware(next http.HandlerFunc) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		var token string
+type Middleware func(http.HandlerFunc) http.HandlerFunc
 
-		authHeader := r.Header.Get("Authorization")
+func NewAuthMiddleware(
+	storeActiveUser ActiveUserProvider,
+	logger *slog.Logger,
+) Middleware {
+	return func(next http.HandlerFunc) http.HandlerFunc {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			var token string
 
-		if authHeader != "" {
-			token = authHeader[len(bearerString):]
-		}
+			authHeader := r.Header.Get("Authorization")
 
-		if token == "" {
-			cookie, err := r.Cookie(authCookieName)
-			if err == nil {
-				token = cookie.Value
+			if authHeader != "" {
+				token = authHeader[len(bearerString):]
 			}
-		}
 
-		w.Header().Set("Authorization", bearerString+token)
+			if token == "" {
+				cookie, err := r.Cookie(authCookieName)
+				if err == nil {
+					token = cookie.Value
+				}
+			}
 
-		user, ok := s.store.ActiveUser.Get(r.Context(), token)
+			w.Header().Set("Authorization", bearerString+token)
 
-		if !ok {
-			http.Error(w, "Auth failed", http.StatusUnauthorized)
-			return
-		}
+			user, ok := storeActiveUser.Get(r.Context(), token)
 
-		ctx := context.WithValue(r.Context(), ctxkeys.UserID, user.ID)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
+			if !ok {
+				http.Error(w, "Auth failed", http.StatusUnauthorized)
+				return
+			}
+
+			ctx := context.WithValue(r.Context(), ctxkeys.UserID, user.ID)
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	}
 }
