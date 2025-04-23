@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log/slog"
 	"net/http"
 
 	"github.com/aube/gophermart/internal/ctxkeys"
@@ -11,55 +12,62 @@ import (
 	"github.com/aube/gophermart/internal/model"
 )
 
-func (s *Server) UserBalanceWithdraw(w http.ResponseWriter, r *http.Request) {
-	ctx := r.Context()
-	userID := ctx.Value(ctxkeys.UserID).(int)
+func NewUserBalanceWithdrawHanlder(
+	storeUser UserProvider,
+	storeBilling BillingProvider,
+	logger *slog.Logger,
+) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
 
-	if r.Body == nil || r.ContentLength == 0 {
-		s.logger.ErrorContext(ctx, "UserBalanceWithdraw", "Request body is empty", "")
-		http.Error(w, "Request body is empty", http.StatusBadRequest)
-		return
-	}
+		ctx := r.Context()
+		userID := ctx.Value(ctxkeys.UserID).(int)
 
-	// Body
-	body, err := io.ReadAll(r.Body)
-	if err != nil {
-		s.logger.ErrorContext(ctx, "UserBalanceWithdraw", "err", err)
-		http.Error(w, "Failed to read request body", http.StatusInternalServerError)
-		return
-	}
-
-	// JSON
-	wd, err := model.ParseWithdraw(body)
-	if err != nil {
-		s.logger.ErrorContext(ctx, "UserBalanceWithdraw", "err", err)
-		return
-	}
-
-	user := model.User{
-		ID: userID,
-	}
-	s.store.User.Balance(ctx, &user)
-
-	fmt.Println(wd)
-
-	// Store
-	err = s.store.Billing.BalanceWithdraw(ctx, &wd, &user)
-	if err != nil {
-		s.logger.ErrorContext(ctx, "UserBalanceWithdraw", "err", err)
-
-		var heherr *httperrors.HTTPError
-		if errors.As(err, &heherr) {
-			http.Error(w, heherr.Message, heherr.Code)
-		} else {
-			http.Error(w, "Balance withdraw error", http.StatusInternalServerError)
+		if r.Body == nil || r.ContentLength == 0 {
+			logger.ErrorContext(ctx, "UserBalanceWithdraw", "Request body is empty", "")
+			http.Error(w, "Request body is empty", http.StatusBadRequest)
+			return
 		}
 
-		return
+		// Body
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			logger.ErrorContext(ctx, "UserBalanceWithdraw", "err", err)
+			http.Error(w, "Failed to read request body", http.StatusInternalServerError)
+			return
+		}
+
+		// JSON
+		wd, err := model.ParseWithdraw(body)
+		if err != nil {
+			logger.ErrorContext(ctx, "UserBalanceWithdraw", "err", err)
+			return
+		}
+
+		user := model.User{
+			ID: userID,
+		}
+		storeUser.Balance(ctx, &user)
+
+		fmt.Println(wd)
+
+		// Store
+		err = storeBilling.BalanceWithdraw(ctx, &wd, &user)
+		if err != nil {
+			logger.ErrorContext(ctx, "UserBalanceWithdraw", "err", err)
+
+			var heherr *httperrors.HTTPError
+			if errors.As(err, &heherr) {
+				http.Error(w, heherr.Message, heherr.Code)
+			} else {
+				http.Error(w, "Balance withdraw error", http.StatusInternalServerError)
+			}
+
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)
+		w.Write([]byte("Ololo, World!"))
+
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("Ololo, World!"))
-
 }
