@@ -18,9 +18,19 @@ func Start() error {
 		panic(err)
 	}
 
-	client.NewServicePolling(store, config.AccrualSystemAddress)
+	client.NewServicePolling(
+		store.Order,
+		store.OrdersQueue,
+		config.AccrualSystemAddress,
+	)
 
-	mux := api.NewRouter(store)
+	mux := api.NewRouter(
+		store.ActiveUser,
+		store.Billing,
+		store.Order,
+		store.OrdersQueue,
+		store.User,
+	)
 
 	return http.ListenAndServe(config.ServerAddress, mux)
 }

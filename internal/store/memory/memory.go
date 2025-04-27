@@ -1,9 +1,24 @@
 package memory
 
 import (
+	"context"
+
 	"github.com/aube/gophermart/internal/model"
-	"github.com/aube/gophermart/internal/store/providers"
 )
+
+// ActiveUserProvider ...
+type ActiveUserProvider interface {
+	Set(context.Context, *model.User) error
+	Get(context.Context, string) (*model.User, bool)
+}
+
+// OrdersQueueProvider ...
+type OrdersQueueProvider interface {
+	Enqueue(item int)
+	Dequeue() (int, error)
+	IsEmpty() bool
+	Size() int
+}
 
 // Store ...
 type MemoryStore struct {
@@ -12,14 +27,14 @@ type MemoryStore struct {
 }
 
 // ActiveUser ...
-func (s *MemoryStore) ActiveUser() providers.ActiveUserRepositoryProvider {
+func (s *MemoryStore) ActiveUser() ActiveUserProvider {
 	return &ActiveUserRepository{
 		mem: s.mem,
 	}
 }
 
 // OrdersQueue ...
-func (s *MemoryStore) OrdersQueue() providers.OrdersQueueRepositoryProvider {
+func (s *MemoryStore) OrdersQueue() OrdersQueueProvider {
 	return &OrdersQueueRepository{
 		oq: s.oq,
 	}
