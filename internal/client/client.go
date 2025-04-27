@@ -1,52 +1,76 @@
 package client
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strconv"
 	"time"
 
-	"github.com/aube/gophermart/internal/store"
+	"github.com/aube/gophermart/internal/model"
 )
 
+type OrderProvider interface {
+	Orders(context.Context, int) ([]model.Order, error)
+	UploadOrders(context.Context, *model.Order) error
+	GetNewOrdersID() ([]int, error)
+	SetStatus(int, string) error
+	SetAccrual(int, int) error
+}
+
+type OrdersQueueProvider interface {
+	Enqueue(item int)
+	Dequeue() (int, error)
+	IsEmpty() bool
+	Size() int
+}
+
 // NewServicePolling ...
-func NewServicePolling(store store.Store, accSystemAddress string) error {
+func NewServicePolling(
+	storeOrder OrderProvider,
+	storeOrdersQueue OrdersQueueProvider,
+	accSystemAddress string,
+) error {
 	// Create iterator for send orders to loyalty program
 
 	go func() {
 		for range time.Tick(108 * time.Millisecond) {
-			sendOrderToService(store, accSystemAddress)
+			sendOrderToService(storeOrder, storeOrdersQueue, accSystemAddress)
 		}
 	}()
 
 	// Receive new orders and fill queue
-	orders, err := store.Order.GetNewOrdersID()
+	orders, err := storeOrder.GetNewOrdersID()
 	if err != nil {
 		return err
 	}
 
 	for _, id := range orders {
-		store.OrdersQueue.Enqueue(id)
+		storeOrdersQueue.Enqueue(id)
 	}
 
 	return nil
 }
 
-func sendOrderToService(store store.Store, accSystemAddress string) {
-	if store.OrdersQueue.IsEmpty() {
+func sendOrderToService(
+	storeOrder OrderProvider,
+	storeOrdersQueue OrdersQueueProvider,
+	accSystemAddress string,
+) {
+	if storeOrdersQueue.IsEmpty() {
 		return
 	}
 
-	id, err := store.OrdersQueue.Dequeue()
+	id, err := storeOrdersQueue.Dequeue()
 	if err != nil {
 		return
 	}
 
 	fmt.Println("Dequeue order", id)
 
-	err = store.Order.SetStatus(id, "PROCESSING")
+	err = storeOrder.SetStatus(id, "PROCESSING")
 	if err != nil {
-		store.OrdersQueue.Enqueue(id)
+		storeOrdersQueue.Enqueue(id)
 		return
 	}
 
@@ -55,19 +79,19 @@ func sendOrderToService(store store.Store, accSystemAddress string) {
 	fmt.Println("oa", oa)
 
 	if errors.Is(err, errors.New("new")) {
-		store.Order.SetStatus(id, "NEW")
+		storeOrder.SetStatus(id, "NEW")
 		return
 	}
 
 	if errors.Is(err, errors.New("invalid")) {
-		store.Order.SetStatus(id, "INVALID")
+		storeOrder.SetStatus(id, "INVALID")
 		return
 	}
 
 	if oa.Status == "INVALID" {
-		store.Order.SetStatus(id, "INVALID")
+		storeOrder.SetStatus(id, "INVALID")
 		return
 	}
 
-	store.Order.SetAccrual(id, oa.Accrual)
+	storeOrder.SetAccrual(id, oa.Accrual)
 }

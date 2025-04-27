@@ -4,27 +4,32 @@ import (
 	"net/http"
 
 	"github.com/aube/gophermart/internal/logger"
-	"github.com/aube/gophermart/internal/store"
 )
 
-func NewRouter(store store.Store) *http.ServeMux {
+func NewRouter(
+	storeActiveUser ActiveUserProvider,
+	storeBilling BillingProvider,
+	storeOrder OrderProvider,
+	storeOrdersQueue OrdersQueueProvider,
+	storeUser UserProvider,
+) *http.ServeMux {
 	mux := http.NewServeMux()
 	logger := logger.New()
-	AuthMiddleware := NewAuthMiddleware(store.ActiveUser, logger)
+	AuthMiddleware := NewAuthMiddleware(storeActiveUser, logger)
 
 	// Public
-	mux.HandleFunc(`POST /api/user/register`, NewUserRegisterHandler(store.User, store.ActiveUser, logger))
-	mux.HandleFunc(`POST /api/user/login`, NewUserLoginHandler(store.User, store.ActiveUser, logger))
+	mux.HandleFunc(`POST /api/user/register`, NewUserRegisterHandler(storeUser, storeActiveUser, logger))
+	mux.HandleFunc(`POST /api/user/login`, NewUserLoginHandler(storeUser, storeActiveUser, logger))
 
 	// Private
-	mux.HandleFunc(`GET /api/user/orders`, AuthMiddleware(NewUserOrdersHanlder(store.Order, logger)))
-	mux.HandleFunc(`GET /api/user/balance`, AuthMiddleware(NewUserBalanceHanlder(store.User, logger)))
-	mux.HandleFunc(`POST /api/user/orders`, AuthMiddleware(NewUploadUserOrdersHanlder(store.Order, store.OrdersQueue, logger)))
-	mux.HandleFunc(`GET /api/user/withdrawals`, AuthMiddleware(NewUserWithdrawalsHanlder(store.Billing, logger)))
-	mux.HandleFunc(`POST /api/user/balance/withdraw`, AuthMiddleware(NewUserBalanceWithdrawHanlder(store.User, store.Billing, logger)))
+	mux.HandleFunc(`GET /api/user/orders`, AuthMiddleware(NewUserOrdersHanlder(storeOrder, logger)))
+	mux.HandleFunc(`GET /api/user/balance`, AuthMiddleware(NewUserBalanceHanlder(storeUser, logger)))
+	mux.HandleFunc(`POST /api/user/orders`, AuthMiddleware(NewUploadUserOrdersHanlder(storeOrder, storeOrdersQueue, logger)))
+	mux.HandleFunc(`GET /api/user/withdrawals`, AuthMiddleware(NewUserWithdrawalsHanlder(storeBilling, logger)))
+	mux.HandleFunc(`POST /api/user/balance/withdraw`, AuthMiddleware(NewUserBalanceWithdrawHanlder(storeUser, storeBilling, logger)))
 
 	// Manual debug
-	mux.HandleFunc(`POST /api/user/orders/accrual`, AuthMiddleware(NewUploadUserOrdersAccrualHanlder(store.Order, logger)))
+	mux.HandleFunc(`POST /api/user/orders/accrual`, AuthMiddleware(NewUploadUserOrdersAccrualHanlder(storeOrder, logger)))
 
 	return mux
 }
