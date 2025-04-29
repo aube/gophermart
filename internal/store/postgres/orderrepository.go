@@ -56,9 +56,9 @@ func (r *OrderRepository) UploadOrders(ctx context.Context, o *model.Order) erro
 		return httperrors.NewValidationError(err)
 	}
 
-	if !o.LuhnCheck(o.ID) {
-		return httperrors.NewOrderNumberError()
-	}
+	// if !o.LuhnCheck(o.ID) {
+	// 	return httperrors.NewOrderNumberError()
+	// }
 
 	var newID int
 	r.db.QueryRowContext(

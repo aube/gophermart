@@ -1,97 +1,49 @@
 package client
 
 import (
-	"context"
-	"errors"
 	"fmt"
 	"strconv"
-	"time"
-
-	"github.com/aube/gophermart/internal/model"
 )
 
 type OrderProvider interface {
-	Orders(context.Context, int) ([]model.Order, error)
-	UploadOrders(context.Context, *model.Order) error
-	GetNewOrdersID() ([]int, error)
 	SetStatus(int, string) error
 	SetAccrual(int, int) error
 }
 
-type OrdersQueueProvider interface {
-	Enqueue(item int)
-	Dequeue() (int, error)
-	IsEmpty() bool
-	Size() int
+type accrualClient struct {
+	systemAddress string
+	storeOrder    OrderProvider
 }
 
-// NewServicePolling ...
-func NewServicePolling(
-	storeOrder OrderProvider,
-	storeOrdersQueue OrdersQueueProvider,
-	accSystemAddress string,
-) error {
-	// Create iterator for send orders to loyalty program
-
-	go func() {
-		for range time.Tick(108 * time.Millisecond) {
-			sendOrderToService(storeOrder, storeOrdersQueue, accSystemAddress)
-		}
-	}()
-
-	// Receive new orders and fill queue
-	orders, err := storeOrder.GetNewOrdersID()
-	if err != nil {
-		return err
+func New(systemAddress string, storeOrder OrderProvider) *accrualClient {
+	return &accrualClient{
+		systemAddress: systemAddress,
+		storeOrder:    storeOrder,
 	}
-
-	for _, id := range orders {
-		storeOrdersQueue.Enqueue(id)
-	}
-
-	return nil
 }
 
-func sendOrderToService(
-	storeOrder OrderProvider,
-	storeOrdersQueue OrdersQueueProvider,
-	accSystemAddress string,
-) {
-	if storeOrdersQueue.IsEmpty() {
-		return
+func (ac *accrualClient) SendOrder(id int) string {
+	fmt.Println("Accrual order", id)
+
+	oa, err := request(ac.systemAddress + "/api/orders/" + strconv.Itoa(id))
+
+	fmt.Println("Accrual service response", oa, err)
+
+	if err.Error() == "new" {
+		ac.storeOrder.SetStatus(id, "NEW")
+		return ""
 	}
 
-	id, err := storeOrdersQueue.Dequeue()
-	if err != nil {
-		return
-	}
-
-	fmt.Println("Dequeue order", id)
-
-	err = storeOrder.SetStatus(id, "PROCESSING")
-	if err != nil {
-		storeOrdersQueue.Enqueue(id)
-		return
-	}
-
-	oa, err := request(accSystemAddress + "/api/orders/" + strconv.Itoa(id))
-
-	fmt.Println("oa", oa)
-
-	if errors.Is(err, errors.New("new")) {
-		storeOrder.SetStatus(id, "NEW")
-		return
-	}
-
-	if errors.Is(err, errors.New("invalid")) {
-		storeOrder.SetStatus(id, "INVALID")
-		return
+	if err.Error() == "invalid" {
+		ac.storeOrder.SetStatus(id, "INVALID")
+		return ""
 	}
 
 	if oa.Status == "INVALID" {
-		storeOrder.SetStatus(id, "INVALID")
-		return
+		ac.storeOrder.SetStatus(id, "INVALID")
+		return ""
 	}
 
-	storeOrder.SetAccrual(id, oa.Accrual)
+	ac.storeOrder.SetAccrual(id, oa.Accrual)
+	return ""
 }

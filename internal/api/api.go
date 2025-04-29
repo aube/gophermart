@@ -10,8 +10,8 @@ func NewRouter(
 	storeActiveUser ActiveUserProvider,
 	storeBilling BillingProvider,
 	storeOrder OrderProvider,
-	storeOrdersQueue OrdersQueueProvider,
 	storeUser UserProvider,
+	dispatcher AccrualService,
 ) *http.ServeMux {
 	mux := http.NewServeMux()
 	logger := logger.New()
@@ -24,7 +24,7 @@ func NewRouter(
 	// Private
 	mux.HandleFunc(`GET /api/user/orders`, AuthMiddleware(NewUserOrdersHanlder(storeOrder, logger)))
 	mux.HandleFunc(`GET /api/user/balance`, AuthMiddleware(NewUserBalanceHanlder(storeUser, logger)))
-	mux.HandleFunc(`POST /api/user/orders`, AuthMiddleware(NewUploadUserOrdersHanlder(storeOrder, storeOrdersQueue, logger)))
+	mux.HandleFunc(`POST /api/user/orders`, AuthMiddleware(NewUploadUserOrdersHanlder(storeOrder, dispatcher, logger)))
 	mux.HandleFunc(`GET /api/user/withdrawals`, AuthMiddleware(NewUserWithdrawalsHanlder(storeBilling, logger)))
 	mux.HandleFunc(`POST /api/user/balance/withdraw`, AuthMiddleware(NewUserBalanceWithdrawHanlder(storeUser, storeBilling, logger)))
 
