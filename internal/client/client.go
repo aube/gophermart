@@ -29,13 +29,13 @@ func (ac *accrualClient) SendOrder(id int) string {
 
 	fmt.Println("Accrual service response", oa, err)
 
-	if err.Error() == "new" {
-		ac.storeOrder.SetStatus(id, "NEW")
-		return ""
-	}
-
-	if err.Error() == "invalid" {
-		ac.storeOrder.SetStatus(id, "INVALID")
+	if err != nil {
+		switch err.Error() {
+		case "new":
+			ac.storeOrder.SetStatus(id, "NEW")
+		case "invalid":
+			ac.storeOrder.SetStatus(id, "INVALID")
+		}
 		return ""
 	}
 
