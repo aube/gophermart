@@ -12,14 +12,6 @@ type ActiveUserProvider interface {
 	Get(context.Context, string) (*model.User, bool)
 }
 
-// OrdersQueueProvider ...
-type OrdersQueueProvider interface {
-	Enqueue(item int)
-	Dequeue() (int, error)
-	IsEmpty() bool
-	Size() int
-}
-
 // Store ...
 type MemoryStore struct {
 	mem map[string]*model.User
@@ -30,13 +22,6 @@ type MemoryStore struct {
 func (s *MemoryStore) ActiveUser() ActiveUserProvider {
 	return &ActiveUserRepository{
 		mem: s.mem,
-	}
-}
-
-// OrdersQueue ...
-func (s *MemoryStore) OrdersQueue() OrdersQueueProvider {
-	return &OrdersQueueRepository{
-		oq: s.oq,
 	}
 }
 

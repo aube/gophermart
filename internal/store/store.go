@@ -64,11 +64,10 @@ func NewStore(config string) (Store, error) {
 	}
 
 	store := Store{
-		User:        postgres.New(db).User(),
-		Order:       postgres.New(db).Order(),
-		Billing:     postgres.New(db).Billing(),
-		ActiveUser:  memory.New().ActiveUser(),
-		OrdersQueue: memory.New().OrdersQueue(),
+		User:       postgres.New(db).User(),
+		Order:      postgres.New(db).Order(),
+		Billing:    postgres.New(db).Billing(),
+		ActiveUser: memory.New().ActiveUser(),
 	}
 
 	return store, nil

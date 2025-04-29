@@ -13,7 +13,7 @@ import (
 
 func NewUploadUserOrdersHanlder(
 	storeOrder OrderProvider,
-	storeOrdersQueue OrdersQueueProvider,
+	dispatcher AccrualService,
 	logger *slog.Logger,
 ) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
@@ -58,7 +58,7 @@ func NewUploadUserOrdersHanlder(
 			return
 		}
 
-		storeOrdersQueue.Enqueue(order.ID)
+		dispatcher.AddWork(order.ID)
 
 		w.WriteHeader(http.StatusAccepted)
 		w.Write([]byte("Order uploaded"))

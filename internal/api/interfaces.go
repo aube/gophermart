@@ -30,9 +30,6 @@ type OrderProvider interface {
 	SetAccrual(int, int) error
 }
 
-type OrdersQueueProvider interface {
-	Enqueue(item int)
-	Dequeue() (int, error)
-	IsEmpty() bool
-	Size() int
+type AccrualService interface {
+	AddWork(int)
 }
