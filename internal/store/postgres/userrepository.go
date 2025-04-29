@@ -35,7 +35,7 @@ func (r *UserRepository) Register(ctx context.Context, u *model.User) error {
 
 	// проверяем, что ошибка сигнализирует о потенциальном нарушении целостности данных
 	var pgErr *pgconn.PgError
-	if errors.As(err, &pgErr) && pgerrcode.IsIntegrityConstraintViolation(pgErr.Code) {
+	if u.ID == 0 || errors.As(err, &pgErr) && pgerrcode.IsIntegrityConstraintViolation(pgErr.Code) {
 		return httperrors.NewConflictError()
 	}
 
