@@ -1,0 +1,2623 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>gophermart: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/aube/gophermart/cmd/gophermart/main.go (0.0%)</option>
+				
+				<option value="file1">github.com/aube/gophermart/internal/api/GET_user_balance.go (47.1%)</option>
+				
+				<option value="file2">github.com/aube/gophermart/internal/api/GET_user_orders.go (90.9%)</option>
+				
+				<option value="file3">github.com/aube/gophermart/internal/api/GET_user_withdrawals.go (90.9%)</option>
+				
+				<option value="file4">github.com/aube/gophermart/internal/api/POST_user_balance_withdraw.go (80.0%)</option>
+				
+				<option value="file5">github.com/aube/gophermart/internal/api/POST_user_login.go (50.0%)</option>
+				
+				<option value="file6">github.com/aube/gophermart/internal/api/POST_user_orders.go (89.7%)</option>
+				
+				<option value="file7">github.com/aube/gophermart/internal/api/POST_user_orders_accrual.go (0.0%)</option>
+				
+				<option value="file8">github.com/aube/gophermart/internal/api/POST_user_register.go (54.8%)</option>
+				
+				<option value="file9">github.com/aube/gophermart/internal/api/api.go (0.0%)</option>
+				
+				<option value="file10">github.com/aube/gophermart/internal/api/middlewareAuth.go (0.0%)</option>
+				
+				<option value="file11">github.com/aube/gophermart/internal/app.go (0.0%)</option>
+				
+				<option value="file12">github.com/aube/gophermart/internal/client/client.go (0.0%)</option>
+				
+				<option value="file13">github.com/aube/gophermart/internal/client/request.go (90.5%)</option>
+				
+				<option value="file14">github.com/aube/gophermart/internal/config.go (91.3%)</option>
+				
+				<option value="file15">github.com/aube/gophermart/internal/httperrors/httperrors.go (100.0%)</option>
+				
+				<option value="file16">github.com/aube/gophermart/internal/logger/logger.go (0.0%)</option>
+				
+				<option value="file17">github.com/aube/gophermart/internal/model/helpers.go (7.3%)</option>
+				
+				<option value="file18">github.com/aube/gophermart/internal/model/modelbilling.go (100.0%)</option>
+				
+				<option value="file19">github.com/aube/gophermart/internal/model/modelorder.go (93.3%)</option>
+				
+				<option value="file20">github.com/aube/gophermart/internal/model/modeluser.go (7.1%)</option>
+				
+				<option value="file21">github.com/aube/gophermart/internal/model/validators.go (100.0%)</option>
+				
+				<option value="file22">github.com/aube/gophermart/internal/store/memory/activeuserrepository.go (0.0%)</option>
+				
+				<option value="file23">github.com/aube/gophermart/internal/store/memory/memory.go (0.0%)</option>
+				
+				<option value="file24">github.com/aube/gophermart/internal/store/migrations.go (0.0%)</option>
+				
+				<option value="file25">github.com/aube/gophermart/internal/store/postgres/billingrepository.go (0.0%)</option>
+				
+				<option value="file26">github.com/aube/gophermart/internal/store/postgres/orderrepository.go (0.0%)</option>
+				
+				<option value="file27">github.com/aube/gophermart/internal/store/postgres/postgres.go (0.0%)</option>
+				
+				<option value="file28">github.com/aube/gophermart/internal/store/postgres/userrepository.go (0.0%)</option>
+				
+				<option value="file29">github.com/aube/gophermart/internal/store/store.go (0.0%)</option>
+				
+				<option value="file30">github.com/aube/gophermart/internal/workerpool/workerpool.go (100.0%)</option>
+				
+				<option value="file31">github.com/aube/gophermart/mocks/api/mocks.go (67.3%)</option>
+				
+				<option value="file32">github.com/aube/gophermart/mocks/app/mocks.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">no coverage</span>
+				<span class="cov1">low coverage</span>
+				<span class="cov2">*</span>
+				<span class="cov3">*</span>
+				<span class="cov4">*</span>
+				<span class="cov5">*</span>
+				<span class="cov6">*</span>
+				<span class="cov7">*</span>
+				<span class="cov8">*</span>
+				<span class="cov9">*</span>
+				<span class="cov10">high coverage</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package main
+
+import (
+        "fmt"
+
+        app "github.com/aube/gophermart/internal"
+)
+
+func main() <span class="cov0" title="0">{
+        fmt.Println("gophermart running")
+
+        app.Start()
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package api
+
+import (
+        "log/slog"
+        "net/http"
+
+        "github.com/aube/gophermart/internal/ctxkeys"
+        "github.com/aube/gophermart/internal/model"
+)
+
+func NewUserBalanceHanlder(
+        storeUser UserProvider,
+        logger *slog.Logger,
+) func(w http.ResponseWriter, r *http.Request) <span class="cov8" title="1">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov8" title="1">{
+                ctx := r.Context()
+                userID := ctx.Value(ctxkeys.UserID).(int)
+
+                user := model.User{
+                        ID: userID,
+                }
+
+                err := storeUser.Balance(ctx, &amp;user)
+                if err != nil </span><span class="cov8" title="1">{
+                        http.Error(w, "Failed to get user balance", http.StatusInternalServerError)
+                        return
+                }</span>
+
+                <span class="cov0" title="0">balance := model.Balance{
+                        Current:   float64(user.Balance) / 100,
+                        Withdrawn: float64(user.Withdrawn) / 100,
+                }
+
+                json, err := model.BalanceToJSON(balance)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        http.Error(w, "Failed to convert user balance", http.StatusInternalServerError)
+                        return
+                }</span>
+
+                <span class="cov0" title="0">w.Header().Set("Content-Type", "application/json")
+                w.WriteHeader(http.StatusOK)
+                w.Write(json)
+
+                logger.Debug("UserBalance", "Balance", balance)</span>
+        }
+
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package api
+
+import (
+        "errors"
+        "log/slog"
+        "net/http"
+
+        "github.com/aube/gophermart/internal/ctxkeys"
+        "github.com/aube/gophermart/internal/httperrors"
+        "github.com/aube/gophermart/internal/model"
+)
+
+func NewUserOrdersHanlder(
+        storeOrder OrderProvider,
+        logger *slog.Logger,
+) func(w http.ResponseWriter, r *http.Request) <span class="cov10" title="4">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov10" title="4">{
+
+                ctx := r.Context()
+                userID := ctx.Value(ctxkeys.UserID).(int)
+
+                w.Header().Set("Content-Type", "application/json")
+
+                // Store
+                orders, err := storeOrder.Orders(ctx, userID)
+
+                if err != nil </span><span class="cov5" title="2">{
+                        logger.ErrorContext(ctx, "UserOrders", "err", err)
+
+                        var heherr *httperrors.HTTPError
+                        if errors.As(err, &amp;heherr) </span><span class="cov1" title="1">{
+                                http.Error(w, heherr.Message, heherr.Code)
+                        }</span> else<span class="cov1" title="1"> {
+                                http.Error(w, "Failed to read user orders", http.StatusInternalServerError)
+                        }</span>
+
+                        <span class="cov5" title="2">return</span>
+                }
+
+                <span class="cov5" title="2">if len(orders) == 0 </span><span class="cov1" title="1">{
+                        w.WriteHeader(http.StatusNoContent)
+                        return
+                }</span>
+
+                // JSON
+                <span class="cov1" title="1">result, err := model.OrdersToJSON(orders)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        http.Error(w, "Failed to convert user orders", http.StatusInternalServerError)
+                        return
+                }</span>
+
+                <span class="cov1" title="1">w.WriteHeader(http.StatusOK)
+                w.Write(result)
+
+                logger.Debug("UserOrders", "User orders", orders)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package api
+
+import (
+        "errors"
+        "log/slog"
+        "net/http"
+
+        "github.com/aube/gophermart/internal/ctxkeys"
+        "github.com/aube/gophermart/internal/httperrors"
+        "github.com/aube/gophermart/internal/model"
+)
+
+func NewUserWithdrawalsHanlder(
+        storeBilling BillingProvider,
+        logger *slog.Logger,
+) func(w http.ResponseWriter, r *http.Request) <span class="cov10" title="4">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov10" title="4">{
+
+                ctx := r.Context()
+                userID := ctx.Value(ctxkeys.UserID).(int)
+
+                w.Header().Set("Content-Type", "application/json")
+
+                // Store
+                wds, err := storeBilling.Withdrawals(ctx, userID)
+                if err != nil </span><span class="cov5" title="2">{
+                        logger.ErrorContext(ctx, "UserWithdrawals", "err", err)
+
+                        var heherr *httperrors.HTTPError
+                        if errors.As(err, &amp;heherr) </span><span class="cov1" title="1">{
+                                http.Error(w, heherr.Message, heherr.Code)
+                        }</span> else<span class="cov1" title="1"> {
+                                http.Error(w, "Failed to read user withdrawals", http.StatusInternalServerError)
+                        }</span>
+
+                        <span class="cov5" title="2">return</span>
+                }
+
+                <span class="cov5" title="2">if len(wds) == 0 </span><span class="cov1" title="1">{
+                        http.Error(w, "No data", http.StatusNoContent)
+                        return
+                }</span>
+
+                // JSON
+                <span class="cov1" title="1">result, err := model.WithdrawalsToJSON(wds)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        http.Error(w, "Failed to convert user withdrawals", http.StatusInternalServerError)
+                        return
+                }</span>
+
+                <span class="cov1" title="1">w.WriteHeader(http.StatusOK)
+                w.Write(result)
+
+                logger.Debug("UserWithdrawals", "User withdrawals", result)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package api
+
+import (
+        "errors"
+        "fmt"
+        "io"
+        "log/slog"
+        "net/http"
+
+        "github.com/aube/gophermart/internal/ctxkeys"
+        "github.com/aube/gophermart/internal/httperrors"
+        "github.com/aube/gophermart/internal/model"
+)
+
+func NewUserBalanceWithdrawHanlder(
+        storeUser UserProvider,
+        storeBilling BillingProvider,
+        logger *slog.Logger,
+) func(w http.ResponseWriter, r *http.Request) <span class="cov10" title="3">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov10" title="3">{
+
+                ctx := r.Context()
+                userID := ctx.Value(ctxkeys.UserID).(int)
+
+                if r.Body == nil || r.ContentLength == 0 </span><span class="cov1" title="1">{
+                        logger.ErrorContext(ctx, "UserBalanceWithdraw", "Request body is empty", "")
+                        http.Error(w, "Request body is empty", http.StatusBadRequest)
+                        return
+                }</span>
+
+                // Body
+                <span class="cov6" title="2">body, err := io.ReadAll(r.Body)
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorContext(ctx, "UserBalanceWithdraw", "err", err)
+                        http.Error(w, "Failed to read request body", http.StatusInternalServerError)
+                        return
+                }</span>
+
+                // JSON
+                <span class="cov6" title="2">wd, err := model.ParseWithdraw(body)
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorContext(ctx, "UserBalanceWithdraw", "err", err)
+                        return
+                }</span>
+
+                <span class="cov6" title="2">user := model.User{
+                        ID: userID,
+                }
+                storeUser.Balance(ctx, &amp;user)
+
+                fmt.Println(wd)
+
+                // Store
+                err = storeBilling.BalanceWithdraw(ctx, &amp;wd, &amp;user)
+                if err != nil </span><span class="cov1" title="1">{
+                        logger.ErrorContext(ctx, "UserBalanceWithdraw", "err", err)
+
+                        var heherr *httperrors.HTTPError
+                        if errors.As(err, &amp;heherr) </span><span class="cov1" title="1">{
+                                http.Error(w, heherr.Message, heherr.Code)
+                        }</span> else<span class="cov0" title="0"> {
+                                http.Error(w, "Balance withdraw error", http.StatusInternalServerError)
+                        }</span>
+
+                        <span class="cov1" title="1">return</span>
+                }
+
+                <span class="cov1" title="1">w.Header().Set("Content-Type", "application/json")
+                w.WriteHeader(http.StatusOK)
+                w.Write([]byte("Ololo, World!"))</span>
+
+        }
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package api
+
+import (
+        "errors"
+        "io"
+        "log/slog"
+        "net/http"
+        "time"
+
+        "github.com/aube/gophermart/internal/httperrors"
+        "github.com/aube/gophermart/internal/model"
+)
+
+func NewUserLoginHandler(
+        storeUser UserProvider,
+        storeActiveUser ActiveUserProvider,
+        logger *slog.Logger,
+) func(w http.ResponseWriter, r *http.Request) <span class="cov10" title="2">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov10" title="2">{
+
+                ctx := r.Context()
+
+                if r.Body == nil || r.ContentLength == 0 </span><span class="cov1" title="1">{
+                        logger.ErrorContext(ctx, "UserLogin", "Request body is empty", "")
+                        http.Error(w, "Request body is empty", http.StatusBadRequest)
+                        return
+                }</span>
+
+                // Body
+                <span class="cov1" title="1">body, err := io.ReadAll(r.Body)
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorContext(ctx, "UserLogin", "err", err)
+                        http.Error(w, "Failed to read request body", http.StatusInternalServerError)
+                        return
+                }</span>
+
+                // JSON
+                <span class="cov1" title="1">user, err := model.ParseCredentials(body)
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorContext(ctx, "UserLogin", "err", err)
+                        return
+                }</span>
+
+                // Store
+                <span class="cov1" title="1">_, err = storeUser.Login(ctx, &amp;user)
+                if err != nil </span><span class="cov1" title="1">{
+                        logger.ErrorContext(ctx, "UserLogin", "err", err)
+
+                        var heherr *httperrors.HTTPError
+                        if errors.As(err, &amp;heherr) </span><span class="cov1" title="1">{
+                                http.Error(w, heherr.Message, heherr.Code)
+                        }</span> else<span class="cov0" title="0"> {
+                                http.Error(w, "Login failed", http.StatusInternalServerError)
+                        }</span>
+
+                        <span class="cov1" title="1">return</span>
+                }
+
+                <span class="cov0" title="0">user.AfterLogin()
+
+                storeActiveUser.Set(ctx, &amp;user)
+
+                setAuthCookie(w, user.RandomHash)
+
+                w.Header().Set("Authorization", bearerString+user.RandomHash)
+
+                w.WriteHeader(http.StatusOK)
+                w.Write([]byte(user.RandomHash))
+
+                logger.DebugContext(ctx, "UserLogin", "user", user)</span>
+        }
+}
+
+func deleteAuthCookie(w http.ResponseWriter) <span class="cov0" title="0">{
+        c := &amp;http.Cookie{
+                Name:     authCookieName,
+                Value:    "",
+                Expires:  time.Unix(0, 0), // Cookie expires in 24 hours
+                Path:     "/",             // Cookie is accessible across the entire site
+                HttpOnly: true,            // Cookie is not accessible via JavaScript
+                Secure:   false,           // Set to true if using HTTPS
+        }
+
+        http.SetCookie(w, c)
+}</span>
+
+func setAuthCookie(w http.ResponseWriter, value string) <span class="cov0" title="0">{
+        c := &amp;http.Cookie{
+                Name:     authCookieName,
+                Value:    value,
+                Expires:  time.Now().Add(24 * time.Hour), // Cookie expires in 24 hours
+                Path:     "/",                            // Cookie is accessible across the entire site
+                HttpOnly: true,                           // Cookie is not accessible via JavaScript
+                Secure:   false,                          // Set to true if using HTTPS
+        }
+
+        http.SetCookie(w, c)
+}</span>
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package api
+
+import (
+        "errors"
+        "io"
+        "log/slog"
+        "net/http"
+
+        "github.com/aube/gophermart/internal/ctxkeys"
+        "github.com/aube/gophermart/internal/httperrors"
+        "github.com/aube/gophermart/internal/model"
+)
+
+func NewUploadUserOrdersHanlder(
+        storeOrder OrderProvider,
+        dispatcher AccrualService,
+        logger *slog.Logger,
+) func(w http.ResponseWriter, r *http.Request) <span class="cov10" title="6">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov10" title="6">{
+
+                ctx := r.Context()
+                userID := ctx.Value(ctxkeys.UserID).(int)
+
+                if r.Body == nil || r.ContentLength == 0 </span><span class="cov1" title="1">{
+                        logger.ErrorContext(ctx, "UploadUserOrders", "Request body is empty", "")
+                        http.Error(w, "Request body is empty", http.StatusBadRequest)
+                        return
+                }</span>
+
+                // Body
+                <span class="cov9" title="5">body, err := io.ReadAll(r.Body)
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorContext(ctx, "UploadUserOrders", "err", err)
+                        http.Error(w, "Failed to read request body", http.StatusInternalServerError)
+                        return
+                }</span>
+
+                // OrderID
+                <span class="cov9" title="5">order, err := model.ParseOrderID(body, userID)
+                if err != nil </span><span class="cov1" title="1">{
+                        logger.ErrorContext(ctx, "UploadUserOrders", "err", err)
+                        http.Error(w, "Failed to convert body to uint64", http.StatusBadRequest)
+                        return
+                }</span>
+
+                // Store
+                <span class="cov7" title="4">err = storeOrder.UploadOrders(ctx, &amp;order)
+                if err != nil </span><span class="cov6" title="3">{
+                        logger.ErrorContext(ctx, "UploadUserOrders", "err", err)
+
+                        var heherr *httperrors.HTTPError
+                        if errors.As(err, &amp;heherr) </span><span class="cov4" title="2">{
+                                http.Error(w, heherr.Message, heherr.Code)
+                        }</span> else<span class="cov1" title="1"> {
+                                http.Error(w, "Failed to upload order", http.StatusInternalServerError)
+                        }</span>
+
+                        <span class="cov6" title="3">return</span>
+                }
+
+                <span class="cov1" title="1">dispatcher.AddWork(order.ID)
+
+                w.WriteHeader(http.StatusAccepted)
+                w.Write([]byte("Order uploaded"))
+
+                logger.Debug("UploadUserOrders", "Order uploaded", order.ID)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package api
+
+import (
+        "errors"
+        "log/slog"
+        "net/http"
+
+        "github.com/aube/gophermart/internal/httperrors"
+)
+
+func NewUploadUserOrdersAccrualHanlder(
+        storeOrder OrderProvider,
+        logger *slog.Logger,
+) func(w http.ResponseWriter, r *http.Request) <span class="cov0" title="0">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+
+                ctx := r.Context()
+
+                // Store
+                err := storeOrder.SetAccrual(123123123, 100000)
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorContext(ctx, "UploadUserOrders", "err", err)
+
+                        var heherr *httperrors.HTTPError
+                        if errors.As(err, &amp;heherr) </span><span class="cov0" title="0">{
+                                http.Error(w, heherr.Message, heherr.Code)
+                        }</span> else<span class="cov0" title="0"> {
+                                http.Error(w, "Failed to upload order", http.StatusInternalServerError)
+                        }</span>
+
+                        <span class="cov0" title="0">return</span>
+                }
+
+                <span class="cov0" title="0">w.WriteHeader(http.StatusAccepted)
+                w.Write([]byte("Order uploaded"))</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package api
+
+import (
+        "errors"
+        "io"
+        "log/slog"
+        "net/http"
+
+        "github.com/aube/gophermart/internal/httperrors"
+        "github.com/aube/gophermart/internal/model"
+)
+
+func NewUserRegisterHandler(
+        storeUser UserProvider,
+        storeActiveUser ActiveUserProvider,
+        logger *slog.Logger,
+) func(w http.ResponseWriter, r *http.Request) <span class="cov10" title="2">{
+        return func(w http.ResponseWriter, r *http.Request) </span><span class="cov10" title="2">{
+
+                ctx := r.Context()
+
+                if r.Body == nil || r.ContentLength == 0 </span><span class="cov1" title="1">{
+                        logger.ErrorContext(ctx, "HandlerCreateUser", "Request body is empty", "")
+                        http.Error(w, "Request body is empty", http.StatusBadRequest)
+                        return
+                }</span>
+
+                // Body
+                <span class="cov1" title="1">body, err := io.ReadAll(r.Body)
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorContext(ctx, "HandlerCreateUser", "err", err)
+                        http.Error(w, "Failed to read request body", http.StatusInternalServerError)
+                        return
+                }</span>
+
+                // JSON
+                <span class="cov1" title="1">user, err := model.ParseCredentials(body)
+                if err != nil </span><span class="cov0" title="0">{
+                        logger.ErrorContext(ctx, "HandlerCreateUser", "err", err)
+                        http.Error(w, "Failed to read request body", http.StatusBadRequest)
+                        return
+                }</span>
+
+                // Store
+                <span class="cov1" title="1">err = storeUser.Register(ctx, &amp;user)
+                if err != nil </span><span class="cov1" title="1">{
+                        logger.ErrorContext(ctx, "HandlerCreateUser", "err", err)
+
+                        var heherr *httperrors.HTTPError
+                        if errors.As(err, &amp;heherr) </span><span class="cov1" title="1">{
+                                http.Error(w, heherr.Message, heherr.Code)
+                        }</span> else<span class="cov0" title="0"> {
+                                http.Error(w, "Failed to create user", http.StatusInternalServerError)
+                        }</span>
+
+                        <span class="cov1" title="1">return</span>
+                }
+
+                <span class="cov0" title="0">user.AfterLogin()
+
+                storeActiveUser.Set(ctx, &amp;user)
+
+                setAuthCookie(w, user.RandomHash)
+
+                w.Header().Set("Authorization", bearerString+user.RandomHash)
+
+                w.WriteHeader(http.StatusOK)
+                w.Write([]byte("User registered"))
+
+                logger.Debug("HandlerCreateUser", "User registered", user.ID)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package api
+
+import (
+        "net/http"
+
+        "github.com/aube/gophermart/internal/logger"
+)
+
+func NewRouter(
+        storeActiveUser ActiveUserProvider,
+        storeBilling BillingProvider,
+        storeOrder OrderProvider,
+        storeUser UserProvider,
+        dispatcher AccrualService,
+) *http.ServeMux <span class="cov0" title="0">{
+        mux := http.NewServeMux()
+        logger := logger.New()
+        AuthMiddleware := NewAuthMiddleware(storeActiveUser, logger)
+
+        // Public
+        mux.HandleFunc(`POST /api/user/register`, NewUserRegisterHandler(storeUser, storeActiveUser, logger))
+        mux.HandleFunc(`POST /api/user/login`, NewUserLoginHandler(storeUser, storeActiveUser, logger))
+
+        // Private
+        mux.HandleFunc(`GET /api/user/orders`, AuthMiddleware(NewUserOrdersHanlder(storeOrder, logger)))
+        mux.HandleFunc(`GET /api/user/balance`, AuthMiddleware(NewUserBalanceHanlder(storeUser, logger)))
+        mux.HandleFunc(`POST /api/user/orders`, AuthMiddleware(NewUploadUserOrdersHanlder(storeOrder, dispatcher, logger)))
+        mux.HandleFunc(`GET /api/user/withdrawals`, AuthMiddleware(NewUserWithdrawalsHanlder(storeBilling, logger)))
+        mux.HandleFunc(`POST /api/user/balance/withdraw`, AuthMiddleware(NewUserBalanceWithdrawHanlder(storeUser, storeBilling, logger)))
+
+        // Manual debug
+        mux.HandleFunc(`POST /api/user/orders/accrual`, AuthMiddleware(NewUploadUserOrdersAccrualHanlder(storeOrder, logger)))
+
+        return mux
+}</span>
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package api
+
+import (
+        "context"
+        "log/slog"
+        "net/http"
+
+        "github.com/aube/gophermart/internal/ctxkeys"
+)
+
+const authCookieName = "auth"
+const bearerString = "Bearer "
+
+type Middleware func(http.HandlerFunc) http.HandlerFunc
+
+func NewAuthMiddleware(
+        storeActiveUser ActiveUserProvider,
+        logger *slog.Logger,
+) Middleware <span class="cov0" title="0">{
+        return func(next http.HandlerFunc) http.HandlerFunc </span><span class="cov0" title="0">{
+                return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) </span><span class="cov0" title="0">{
+                        var token string
+
+                        authHeader := r.Header.Get("Authorization")
+
+                        if authHeader != "" </span><span class="cov0" title="0">{
+                                token = authHeader[len(bearerString):]
+                        }</span>
+
+                        <span class="cov0" title="0">if token == "" </span><span class="cov0" title="0">{
+                                cookie, err := r.Cookie(authCookieName)
+                                if err == nil </span><span class="cov0" title="0">{
+                                        token = cookie.Value
+                                }</span>
+                        }
+
+                        <span class="cov0" title="0">w.Header().Set("Authorization", bearerString+token)
+
+                        user, ok := storeActiveUser.Get(r.Context(), token)
+
+                        if !ok </span><span class="cov0" title="0">{
+                                http.Error(w, "Auth failed", http.StatusUnauthorized)
+                                return
+                        }</span>
+
+                        <span class="cov0" title="0">ctx := context.WithValue(r.Context(), ctxkeys.UserID, user.ID)
+                        next.ServeHTTP(w, r.WithContext(ctx))</span>
+                })
+        }
+}
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package app
+
+import (
+        "net/http"
+
+        "github.com/aube/gophermart/internal/api"
+        "github.com/aube/gophermart/internal/client"
+        "github.com/aube/gophermart/internal/store"
+        "github.com/aube/gophermart/internal/workerpool"
+)
+
+// Start ...
+func Start() error <span class="cov0" title="0">{
+        config := NewConfig()
+
+        store, err := store.NewStore(config.DatabaseDSN)
+
+        if err != nil </span><span class="cov0" title="0">{
+                panic(err)</span>
+        }
+
+        <span class="cov0" title="0">accrualClient := client.New(config.AccrualSystemAddress, store.Order)
+        dispatcher := workerpool.New(3, accrualClient.SendOrder)
+        defer dispatcher.Close()
+
+        // Receive new orders from database
+        orders, err := store.Order.GetNewOrdersID()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">for _, id := range orders </span><span class="cov0" title="0">{
+                dispatcher.AddWork(id)
+        }</span>
+
+        <span class="cov0" title="0">mux := api.NewRouter(
+                store.ActiveUser,
+                store.Billing,
+                store.Order,
+                store.User,
+                dispatcher,
+        )
+
+        return http.ListenAndServe(config.ServerAddress, mux)</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package client
+
+import (
+        "fmt"
+        "strconv"
+)
+
+type OrderProvider interface {
+        SetStatus(int, string) error
+        SetAccrual(int, int) error
+}
+
+type accrualClient struct {
+        systemAddress string
+        storeOrder    OrderProvider
+}
+
+func New(systemAddress string, storeOrder OrderProvider) *accrualClient <span class="cov0" title="0">{
+        return &amp;accrualClient{
+                systemAddress: systemAddress,
+                storeOrder:    storeOrder,
+        }
+}</span>
+
+func (ac *accrualClient) SendOrder(id int) string <span class="cov0" title="0">{
+        fmt.Println("Accrual order", id)
+
+        oa, err := request(ac.systemAddress + "/api/orders/" + strconv.Itoa(id))
+
+        fmt.Println("Accrual service response", oa, err)
+
+        if err != nil </span><span class="cov0" title="0">{
+                switch err.Error() </span>{
+                case "new":<span class="cov0" title="0">
+                        ac.storeOrder.SetStatus(id, "NEW")</span>
+                case "invalid":<span class="cov0" title="0">
+                        ac.storeOrder.SetStatus(id, "INVALID")</span>
+                }
+                <span class="cov0" title="0">return ""</span>
+        }
+
+        <span class="cov0" title="0">if oa.Status == "INVALID" </span><span class="cov0" title="0">{
+                ac.storeOrder.SetStatus(id, "INVALID")
+                return ""
+        }</span>
+
+        <span class="cov0" title="0">ac.storeOrder.SetAccrual(id, oa.Accrual)
+        return ""</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package client
+
+import (
+        "encoding/json"
+        "errors"
+        "fmt"
+        "io"
+        "log"
+        "net/http"
+        "strconv"
+)
+
+// OrderAccrual ...
+type OrderAccrual struct {
+        ID      int     `json:"-"`
+        OrderID string  `json:"order"`
+        Sum     float64 `json:"accrual"`
+        Accrual int     `json:"-"`
+        Status  string  `json:"status"`
+}
+
+// ParseOrderAccrual ...
+func ParseOrderAccrual(requestBody []byte) (OrderAccrual, error) <span class="cov10" title="4">{
+        var oa OrderAccrual
+
+        err := json.Unmarshal(requestBody, &amp;oa)
+        if err != nil </span><span class="cov1" title="1">{
+                return OrderAccrual{}, err
+        }</span>
+        <span class="cov8" title="3">oa.Accrual = int(oa.Sum * 100)
+        oa.ID, err = strconv.Atoi(oa.OrderID)
+        if err != nil </span><span class="cov1" title="1">{
+                return OrderAccrual{}, err
+        }</span>
+
+        <span class="cov5" title="2">return oa, nil</span>
+}
+
+// Request ...
+func request(address string) (OrderAccrual, error) <span class="cov8" title="3">{
+        resp, err := http.Get(address)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Println(err)
+        }</span>
+        <span class="cov8" title="3">defer resp.Body.Close()
+
+        body, err := io.ReadAll(resp.Body)
+        if err != nil </span><span class="cov0" title="0">{
+                return OrderAccrual{}, err
+        }</span>
+
+        <span class="cov8" title="3">fmt.Println("body", string(body))
+
+        switch resp.StatusCode </span>{
+        case 204:<span class="cov1" title="1">
+                return OrderAccrual{}, errors.New("invalid")</span>
+        case 429:<span class="cov1" title="1">
+                return OrderAccrual{}, errors.New("new")</span>
+        default:<span class="cov1" title="1">
+                return ParseOrderAccrual(body)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package app
+
+import (
+        "flag"
+        "fmt"
+        "log"
+        "os"
+
+        "github.com/joho/godotenv"
+        "github.com/kelseyhightower/envconfig"
+)
+
+var configPath = "configs/.env.gophermart"
+
+type envConfig struct {
+        ServerAddress         string `envconfig:"RUN_ADDRESS" default:"localhost:8080"`
+        LogLevel              string `envconfig:"LOG_LEVEL" default:"debug"`
+        DatabaseDSN           string `envconfig:"DATABASE_URI"`
+        TokenSecret           string `envconfig:"TOKEN_SECRET"`
+        DefaultRequestTimeout string `envconfig:"DEFAULT_REQUEST_TIMEOUT"`
+        AccrualSystemAddress  string `envconfig:"ACCRUAL_SYSTEM_ADDRESS"`
+}
+
+func NewConfig() *envConfig <span class="cov10" title="2">{
+        env := os.Getenv("GO_ENV")
+
+        if env == "" </span><span class="cov10" title="2">{
+                env = ".development"
+        }</span>
+
+        <span class="cov10" title="2">godotenv.Load(configPath + env)
+
+        var cfg envConfig
+        err := envconfig.Process("", &amp;cfg)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatal("Failed to process env vars: ", err)
+        }</span>
+
+        <span class="cov10" title="2">var flagServerAddress string
+        var flagDatabaseDSN string
+        var flagAccrualSystemAddress string
+
+        flag.StringVar(&amp;flagAccrualSystemAddress, "r", "http://localhost:8081", "accrual system address")
+        flag.StringVar(&amp;flagServerAddress, "a", "localhost:8080", "address and port to run service")
+        flag.StringVar(&amp;flagDatabaseDSN, "d", "", "Database connection string")
+        flag.Parse()
+
+        if cfg.ServerAddress == "" </span><span class="cov0" title="0">{
+                cfg.ServerAddress = flagServerAddress
+        }</span>
+
+        <span class="cov10" title="2">if cfg.DatabaseDSN == "" </span><span class="cov1" title="1">{
+                cfg.DatabaseDSN = flagDatabaseDSN
+        }</span>
+
+        <span class="cov10" title="2">if cfg.AccrualSystemAddress == "" </span><span class="cov1" title="1">{
+                cfg.AccrualSystemAddress = flagAccrualSystemAddress
+        }</span>
+
+        <span class="cov10" title="2">fmt.Println("LogLevel", cfg.LogLevel)
+        return &amp;cfg</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package httperrors
+
+import (
+        "errors"
+        "fmt"
+        "net/http"
+)
+
+type HTTPError struct {
+        Code    int
+        Err     error
+        Message string
+}
+
+func (he *HTTPError) Error() string <span class="cov10" title="14">{
+        return fmt.Sprintf("%d - %s", he.Code, he.Message)
+}</span>
+
+func NewHTTPError(code int, message string) error <span class="cov10" title="14">{
+        return &amp;HTTPError{
+                Code:    code,
+                Message: message,
+                Err:     errors.New(message),
+        }
+}</span>
+
+func NewServerError(err error) error <span class="cov3" title="2">{
+        return NewHTTPError(500, fmt.Sprint(err))
+}</span>
+
+func NewRecordNotFound() error <span class="cov1" title="1">{
+        return NewHTTPError(404, "Record not found")
+}</span>
+
+func NewValidationError(validationError error) error <span class="cov1" title="1">{
+        return NewHTTPError(http.StatusBadRequest, fmt.Sprint(validationError))
+}</span>
+
+func NewConflictError() error <span class="cov1" title="1">{
+        return NewHTTPError(http.StatusConflict, "Conflict") // 409
+}</span>
+
+func NewLoginFailed() error <span class="cov1" title="1">{
+        return NewHTTPError(http.StatusForbidden, "Login failed") // 403
+}</span>
+
+func NewAccessDenied() error <span class="cov1" title="1">{
+        return NewHTTPError(http.StatusForbidden, "Access denied") // 403
+}</span>
+
+func NewAlreadyUploadedByMeError() error <span class="cov1" title="1">{
+        return NewHTTPError(http.StatusOK, "Already uploaded") // 200
+}</span>
+
+func NewAlreadyUploadedAnotherError() error <span class="cov1" title="1">{
+        return NewHTTPError(http.StatusConflict, "Already uploaded") // 200
+}</span>
+
+func NewNotEnoughMoneyError() error <span class="cov1" title="1">{
+        return NewHTTPError(402, "I need more gold!")
+}</span>
+
+func NewOrderNumberError() error <span class="cov1" title="1">{
+        return NewHTTPError(http.StatusUnprocessableEntity, "Order number incorrect") // 422
+}</span>
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package logger
+
+import (
+        "io"
+        "log/slog"
+        "os"
+        "sync"
+        "time"
+)
+
+var (
+        globalLogger *slog.Logger
+        initOnce     sync.Once
+)
+
+type Config struct {
+        Level     slog.Level
+        Output    io.Writer
+        AddSource bool
+        JSON      bool
+}
+
+// Init initializes the global logger (thread-safe)
+func Init(cfg Config) <span class="cov0" title="0">{
+        initOnce.Do(func() </span><span class="cov0" title="0">{
+                opts := &amp;slog.HandlerOptions{
+                        Level:     cfg.Level,
+                        AddSource: cfg.AddSource,
+                        ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr </span><span class="cov0" title="0">{
+                                // Customize attribute output
+                                if a.Key == slog.TimeKey </span><span class="cov0" title="0">{
+                                        return slog.Attr{
+                                                Key:   "ts",
+                                                Value: slog.StringValue(a.Value.Time().Format(time.RFC3339)),
+                                        }
+                                }</span>
+                                <span class="cov0" title="0">return a</span>
+                        },
+                }
+
+                <span class="cov0" title="0">var handler slog.Handler
+                if cfg.JSON </span><span class="cov0" title="0">{
+                        handler = slog.NewJSONHandler(cfg.Output, opts)
+                }</span> else<span class="cov0" title="0"> {
+                        handler = slog.NewTextHandler(cfg.Output, opts)
+                }</span>
+
+                <span class="cov0" title="0">globalLogger = slog.New(handler)</span>
+        })
+}
+
+// New ...
+func New() *slog.Logger <span class="cov0" title="0">{
+        if globalLogger == nil </span><span class="cov0" title="0">{
+                Init(Config{
+                        Level:     slog.LevelDebug,
+                        Output:    os.Stdout,
+                        AddSource: false,
+                        JSON:      true,
+                })
+        }</span>
+        <span class="cov0" title="0">return globalLogger</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package model
+
+import (
+        "crypto/rand"
+        "crypto/sha256"
+        "encoding/hex"
+        "encoding/json"
+        "math/big"
+        "strconv"
+
+        "golang.org/x/crypto/bcrypt"
+)
+
+func encryptString(s string) (string, error) <span class="cov8" title="1">{
+        b, err := bcrypt.GenerateFromPassword([]byte(s), bcrypt.MinCost)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+
+        <span class="cov8" title="1">return string(b), nil</span>
+}
+
+func generateRandomString(n int, includeSpecial bool) (string, error) <span class="cov0" title="0">{
+        const (
+                letterBytes  = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+                specialChars = "!@#$%^&amp;*()_+-=[]{}|;:,.&lt;&gt;?"
+        )
+
+        charset := letterBytes
+        if includeSpecial </span><span class="cov0" title="0">{
+                charset += specialChars
+        }</span>
+
+        <span class="cov0" title="0">ret := make([]byte, n)
+        for i := 0; i &lt; n; i++ </span><span class="cov0" title="0">{
+                num, err := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
+                if err != nil </span><span class="cov0" title="0">{
+                        return "", err
+                }</span>
+                <span class="cov0" title="0">ret[i] = charset[num.Int64()]</span>
+        }
+
+        <span class="cov0" title="0">return string(ret), nil</span>
+}
+
+func makeHash() (string, error) <span class="cov0" title="0">{
+        input, err := generateRandomString(32, true)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", err
+        }</span>
+        <span class="cov0" title="0">hash := sha256.Sum256([]byte(input))
+        return hex.EncodeToString(hash[:]), nil</span>
+}
+
+func ParseCredentials(requestBody []byte) (User, error) <span class="cov0" title="0">{
+        var user User
+
+        err := json.Unmarshal(requestBody, &amp;user)
+        if err != nil </span><span class="cov0" title="0">{
+                return User{}, err
+        }</span>
+
+        <span class="cov0" title="0">return user, nil</span>
+}
+
+func ParseOrderID(requestBody []byte, userID int) (Order, error) <span class="cov0" title="0">{
+        id, err := strconv.Atoi(string(requestBody))
+        if err != nil </span><span class="cov0" title="0">{
+                return Order{}, err
+        }</span>
+
+        <span class="cov0" title="0">return Order{
+                ID:     id,
+                UserID: userID,
+        }, nil</span>
+}
+
+func ParseWithdraw(requestBody []byte) (Withdraw, error) <span class="cov0" title="0">{
+        var wd Withdraw
+
+        err := json.Unmarshal(requestBody, &amp;wd)
+        if err != nil </span><span class="cov0" title="0">{
+                return Withdraw{}, err
+        }</span>
+        <span class="cov0" title="0">wd.Amount = int64(wd.Sum * 100)
+
+        return wd, nil</span>
+}
+
+func OrdersToJSON(orders []Order) ([]byte, error) <span class="cov0" title="0">{
+        jsonData, err := json.Marshal(orders)
+
+        return jsonData, err
+}</span>
+
+func WithdrawalsToJSON(wds []Withdraw) ([]byte, error) <span class="cov0" title="0">{
+        jsonData, err := json.Marshal(wds)
+
+        return jsonData, err
+}</span>
+
+func BalanceToJSON(balance Balance) ([]byte, error) <span class="cov0" title="0">{
+        jsonData, err := json.Marshal(balance)
+
+        return jsonData, err
+}</span>
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package model
+
+import (
+        "time"
+
+        validation "github.com/go-ozzo/ozzo-validation"
+)
+
+// Withdraw ...
+type Withdraw struct {
+        OrderID     int       `json:"order,string"`
+        Amount      int64     `json:"-" db:"amount"`
+        Sum         float64   `json:"sum" db:"-"`
+        ProcessedAt time.Time `json:"processed_at" db:"created_at"`
+}
+
+// Validate ...
+func (w *Withdraw) Validate() error <span class="cov10" title="3">{
+        return validation.ValidateStruct(
+                w,
+                validation.Field(&amp;w.OrderID, validation.Required),
+                validation.Field(&amp;w.Amount, validation.Required),
+        )
+}</span>
+
+// Balance ...
+type Balance struct {
+        Withdrawn float64 `json:"withdrawn"`
+        Current   float64 `json:"current"`
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package model
+
+import (
+        "strconv"
+
+        validation "github.com/go-ozzo/ozzo-validation"
+)
+
+// Order ...
+type Order struct {
+        ID         int     `json:"number,string"`
+        UserID     int     `json:"-"`
+        Accrual    float64 `json:"accrual,omitempty"`
+        Status     string  `json:"status"`
+        UploadedAT string  `json:"uploaded_at" db:"created_at"`
+}
+
+// UploadOrderValidate ...
+func (o *Order) UploadOrderValidate() error <span class="cov3" title="3">{
+        return validation.ValidateStruct(
+                o,
+                validation.Field(&amp;o.ID, validation.Required),
+                validation.Field(&amp;o.UserID, validation.Required),
+        )
+}</span>
+
+// LuhnCheck ...
+func (o *Order) LuhnCheck(orderID int) bool <span class="cov4" title="4">{
+        number := strconv.Itoa(orderID)
+        sum := 0
+        alternate := false
+
+        for i := len(number) - 1; i &gt;= 0; i-- </span><span class="cov10" title="28">{
+                digit, err := strconv.Atoi(string(number[i]))
+                if err != nil </span><span class="cov0" title="0">{
+                        return false // contains non-digit character
+                }</span>
+
+                <span class="cov10" title="28">if alternate </span><span class="cov7" title="12">{
+                        digit *= 2
+                        if digit &gt; 9 </span><span class="cov3" title="3">{
+                                digit = (digit % 10) + 1
+                        }</span>
+                }
+
+                <span class="cov10" title="28">sum += digit
+                alternate = !alternate</span>
+        }
+
+        <span class="cov4" title="4">return sum%10 == 0</span>
+}
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package model
+
+import (
+        validation "github.com/go-ozzo/ozzo-validation"
+        "golang.org/x/crypto/bcrypt"
+)
+
+// User ...
+type User struct {
+        ID                int    `json:"id"`
+        Login             string `json:"login"`
+        Password          string `json:"password,omitempty"`
+        EncryptedPassword string `json:"-"`
+        RandomHash        string `json:"-"`
+        Balance           int64  `json:"balance"`
+        Withdrawn         int64  `json:"withdrawn"`
+}
+
+// Validate ...
+func (u *User) Validate() error <span class="cov10" title="2">{
+        return validation.ValidateStruct(
+                u,
+                validation.Field(&amp;u.Login, validation.Required),
+                validation.Field(&amp;u.Password, validation.By(requiredIf(u.EncryptedPassword == "")), validation.Length(6, 100)),
+        )
+}</span>
+
+// BeforeCreate ...
+func (u *User) BeforeCreate() error <span class="cov0" title="0">{
+        if len(u.Password) &gt; 0 </span><span class="cov0" title="0">{
+                enc, err := encryptString(u.Password)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov0" title="0">u.EncryptedPassword = enc</span>
+        }
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+// AfterLogin ...
+func (u *User) AfterLogin() error <span class="cov0" title="0">{
+        hash, err := makeHash()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">u.RandomHash = hash
+
+        return nil</span>
+}
+
+// Sanitize ...
+func (u *User) Sanitize() <span class="cov0" title="0">{
+        u.Password = ""
+}</span>
+
+// ComparePassword ...
+func (u *User) ComparePassword(password string) bool <span class="cov0" title="0">{
+        return bcrypt.CompareHashAndPassword([]byte(u.EncryptedPassword), []byte(password)) == nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package model
+
+import validation "github.com/go-ozzo/ozzo-validation"
+
+func requiredIf(cond bool) validation.RuleFunc <span class="cov10" title="6">{
+        return func(value any) error </span><span class="cov10" title="6">{
+                if cond </span><span class="cov7" title="4">{
+                        return validation.Validate(value, validation.Required)
+                }</span>
+
+                <span class="cov4" title="2">return nil</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package memory
+
+import (
+        "context"
+
+        "github.com/aube/gophermart/internal/model"
+)
+
+// ActiveUserRepository ...
+type ActiveUserRepository struct {
+        mem map[string]*model.User
+}
+
+// Set ...
+func (r *ActiveUserRepository) Set(ctx context.Context, u *model.User) error <span class="cov0" title="0">{
+        r.mem[u.RandomHash] = u
+        return nil
+}</span>
+
+// Get ...
+func (r *ActiveUserRepository) Get(ctx context.Context, RandomHash string) (*model.User, bool) <span class="cov0" title="0">{
+        user, ok := r.mem[RandomHash]
+
+        return user, ok
+}</span>
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package memory
+
+import (
+        "context"
+
+        "github.com/aube/gophermart/internal/model"
+)
+
+// ActiveUserProvider ...
+type ActiveUserProvider interface {
+        Set(context.Context, *model.User) error
+        Get(context.Context, string) (*model.User, bool)
+}
+
+// Store ...
+type MemoryStore struct {
+        mem map[string]*model.User
+        oq  []int
+}
+
+// ActiveUser ...
+func (s *MemoryStore) ActiveUser() ActiveUserProvider <span class="cov0" title="0">{
+        return &amp;ActiveUserRepository{
+                mem: s.mem,
+        }
+}</span>
+
+// New ...
+func New() *MemoryStore <span class="cov0" title="0">{
+        return &amp;MemoryStore{
+                mem: make(map[string]*model.User),
+                oq:  []int{},
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package store
+
+import (
+        "database/sql"
+        "embed"
+
+        "github.com/pressly/goose/v3"
+)
+
+// Postgres
+//
+//go:embed postgres/migrations/*.sql
+var embedPostgresMigrations embed.FS
+
+func runPostgresMigrations(db *sql.DB) <span class="cov0" title="0">{
+
+        goose.SetBaseFS(embedPostgresMigrations)
+
+        if err := goose.SetDialect("postgres"); err != nil </span><span class="cov0" title="0">{
+                panic(err)</span>
+        }
+
+        <span class="cov0" title="0">if err := goose.Up(db, "postgres/migrations"); err != nil </span><span class="cov0" title="0">{
+                panic(err)</span>
+        }
+}
+
+//Others ...
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package postgres
+
+import (
+        "context"
+        "database/sql"
+        "errors"
+        "fmt"
+
+        "github.com/aube/gophermart/internal/httperrors"
+        "github.com/aube/gophermart/internal/model"
+)
+
+// BillingRepository ...
+type BillingRepository struct {
+        db *sql.DB
+}
+
+// BalanceWithdraw ...
+func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withdraw, u *model.User) error <span class="cov0" title="0">{
+        if err := wd.Validate(); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">if u.Balance &lt; wd.Amount </span><span class="cov0" title="0">{
+                return httperrors.NewNotEnoughMoneyError()
+        }</span>
+
+        <span class="cov0" title="0">tx, err := r.db.Begin()
+        if err != nil </span><span class="cov0" title="0">{
+                return httperrors.NewServerError(err)
+        }</span>
+
+        <span class="cov0" title="0">var newID int
+        err = tx.QueryRowContext(
+                ctx,
+                "insert into billing (user_id, order_id, amount) values ($1, $2, $3) RETURNING id",
+                u.ID,
+                wd.OrderID,
+                wd.Amount,
+        ).Scan(&amp;newID)
+
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback()
+                return httperrors.NewServerError(err)
+        }</span>
+        <span class="cov0" title="0">fmt.Println(wd)
+        if newID == 0 </span><span class="cov0" title="0">{
+                tx.Rollback()
+                return httperrors.NewServerError(errors.New("withdraw error"))
+        }</span>
+
+        <span class="cov0" title="0">_, err = tx.ExecContext(
+                ctx,
+                "update users set balance = $1, withdrawn = $2 where id = $3",
+                u.Balance-wd.Amount,
+                u.Withdrawn+wd.Amount,
+                u.ID,
+        )
+
+        fmt.Println(wd.Amount)
+        fmt.Println(u.Balance)
+        fmt.Println(u.Withdrawn)
+        fmt.Println(u.ID)
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback()
+                return httperrors.NewServerError(err)
+        }</span>
+
+        <span class="cov0" title="0">return tx.Commit()</span>
+
+}
+
+// Withdrawals ...
+func (r *BillingRepository) Withdrawals(ctx context.Context, userID int) ([]model.Withdraw, error) <span class="cov0" title="0">{
+        rows, err := r.db.QueryContext(
+                ctx,
+                "select order_id, amount, created_at from billing where user_id=$1",
+                userID,
+        )
+
+        if err != nil </span><span class="cov0" title="0">{
+                return []model.Withdraw{}, httperrors.NewServerError(err)
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        if err := rows.Err(); err != nil </span><span class="cov0" title="0">{
+                return []model.Withdraw{}, httperrors.NewServerError(err)
+        }</span>
+
+        <span class="cov0" title="0">var result []model.Withdraw
+
+        for rows.Next() </span><span class="cov0" title="0">{
+                var wd model.Withdraw
+                err := rows.Scan(&amp;wd.OrderID, &amp;wd.Amount, &amp;wd.ProcessedAt)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        return []model.Withdraw{}, httperrors.NewServerError(err)
+                }</span>
+
+                <span class="cov0" title="0">wd.Sum = float64(wd.Amount) / 100
+
+                result = append(result, wd)</span>
+        }
+
+        <span class="cov0" title="0">return result, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package postgres
+
+import (
+        "context"
+        "database/sql"
+        "errors"
+        "fmt"
+        "time"
+
+        "github.com/aube/gophermart/internal/httperrors"
+        "github.com/aube/gophermart/internal/model"
+)
+
+// OrderRepository ...
+type OrderRepository struct {
+        db *sql.DB
+}
+
+// Orders ...
+func (r *OrderRepository) Orders(ctx context.Context, userID int) ([]model.Order, error) <span class="cov0" title="0">{
+
+        rows, err := r.db.QueryContext(
+                ctx,
+                "select id, accrual, status, created_at from orders where user_id=$1",
+                userID,
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                return []model.Order{}, httperrors.NewServerError(err)
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        if err := rows.Err(); err != nil </span><span class="cov0" title="0">{
+                return []model.Order{}, httperrors.NewServerError(err)
+        }</span>
+
+        <span class="cov0" title="0">var result []model.Order
+
+        for rows.Next() </span><span class="cov0" title="0">{
+                var o model.Order
+                err := rows.Scan(&amp;o.ID, &amp;o.Accrual, &amp;o.Status, &amp;o.UploadedAT)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        return []model.Order{}, httperrors.NewServerError(err)
+                }</span>
+
+                <span class="cov0" title="0">o.Accrual /= 100
+                result = append(result, o)</span>
+        }
+
+        <span class="cov0" title="0">return result, nil</span>
+}
+
+// UploadOrders ...
+func (r *OrderRepository) UploadOrders(ctx context.Context, o *model.Order) error <span class="cov0" title="0">{
+        if err := o.UploadOrderValidate(); err != nil </span><span class="cov0" title="0">{
+                return httperrors.NewValidationError(err)
+        }</span>
+
+        <span class="cov0" title="0">if !o.LuhnCheck(o.ID) </span><span class="cov0" title="0">{
+                return httperrors.NewOrderNumberError()
+        }</span>
+
+        <span class="cov0" title="0">var newID int
+        r.db.QueryRowContext(
+                ctx,
+                "INSERT INTO orders (id, user_id) VALUES ($1, $2) ON CONFLICT (id) DO NOTHING RETURNING id",
+                o.ID,
+                o.UserID,
+        ).Scan(&amp;newID)
+
+        if newID &gt; 0 </span><span class="cov0" title="0">{
+                return nil
+        }</span>
+
+        <span class="cov0" title="0">var userID int
+        r.db.QueryRowContext(
+                ctx,
+                "select user_id from orders where id=$1",
+                o.ID,
+        ).Scan(&amp;userID)
+
+        if userID == o.UserID </span><span class="cov0" title="0">{
+                return httperrors.NewAlreadyUploadedByMeError()
+        }</span>
+
+        <span class="cov0" title="0">return httperrors.NewAlreadyUploadedAnotherError()</span>
+}
+
+// GetNewOrdersID ...
+func (r *OrderRepository) GetNewOrdersID() ([]int, error) <span class="cov0" title="0">{
+        ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+        defer cancel()
+
+        rows, err := r.db.QueryContext(
+                ctx,
+                "select id from orders where status='NEW'",
+        )
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, errors.New("orders select error")
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        if err := rows.Err(); err != nil </span><span class="cov0" title="0">{
+                return []int{}, httperrors.NewServerError(err)
+        }</span>
+
+        <span class="cov0" title="0">var result []int
+
+        for rows.Next() </span><span class="cov0" title="0">{
+                var id int
+                err := rows.Scan(&amp;id)
+
+                if err != nil </span><span class="cov0" title="0">{
+                        return nil, errors.New("order Scan error")
+                }</span>
+
+                <span class="cov0" title="0">result = append(result, id)</span>
+        }
+
+        <span class="cov0" title="0">return result, nil</span>
+}
+
+// SetStatus ...
+func (r *OrderRepository) SetStatus(id int, status string) error <span class="cov0" title="0">{
+
+        fmt.Println("SetStatus", id, status)
+
+        ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+        defer cancel()
+
+        _, err := r.db.ExecContext(
+                ctx,
+                "update orders set status=$1 where id=$2",
+                status,
+                id,
+        )
+
+        if err != nil </span><span class="cov0" title="0">{
+                return errors.New("order change status error")
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+// SetAccrual ...
+func (r *OrderRepository) SetAccrual(id int, accrual int) error <span class="cov0" title="0">{
+
+        fmt.Println("SetAccrual", id, accrual)
+
+        ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+        defer cancel()
+
+        var userID int
+        var balance int
+
+        // Select user data by order_id
+        if err := r.db.QueryRow(
+                `SELECT o.user_id as userID, u.balance as balance
+                FROM orders as o
+                LEFT JOIN users as u ON o.user_id = u.id
+                WHERE o.id = $1`,
+                id,
+        ).Scan(
+                &amp;userID,
+                &amp;balance,
+        ); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        // TX begin
+        <span class="cov0" title="0">tx, err := r.db.Begin()
+        if err != nil </span><span class="cov0" title="0">{
+                return httperrors.NewServerError(err)
+        }</span>
+
+        // Change order status and accrual
+        <span class="cov0" title="0">_, err = tx.ExecContext(
+                ctx,
+                "update orders set status=$1, accrual=$2 where id=$3",
+                "PROCESSED",
+                accrual,
+                id,
+        )
+
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback()
+                return errors.New("urder change status error")
+        }</span>
+
+        // Change user balance
+        <span class="cov0" title="0">_, err = tx.ExecContext(
+                ctx,
+                "update users set balance=$1 where id=$2",
+                balance+accrual,
+                userID,
+        )
+
+        if err != nil </span><span class="cov0" title="0">{
+                tx.Rollback()
+                return errors.New("user change balance error")
+        }</span>
+
+        <span class="cov0" title="0">tx.Commit()
+
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package postgres
+
+import (
+        "context"
+        "database/sql"
+
+        "github.com/aube/gophermart/internal/model"
+)
+
+// BillingProvider ...
+type BillingProvider interface {
+        Withdrawals(context.Context, int) ([]model.Withdraw, error)
+        BalanceWithdraw(context.Context, *model.Withdraw, *model.User) error
+}
+
+// OrderProvider ...
+type OrderProvider interface {
+        Orders(context.Context, int) ([]model.Order, error)
+        UploadOrders(context.Context, *model.Order) error
+        GetNewOrdersID() ([]int, error)
+        SetStatus(int, string) error
+        SetAccrual(int, int) error
+}
+
+// UserProvider ...
+type UserProvider interface {
+        Register(context.Context, *model.User) error
+        Login(context.Context, *model.User) (*model.User, error)
+        Balance(context.Context, *model.User) error
+}
+
+// Store ...
+type SQLStore struct {
+        db *sql.DB
+}
+
+// User ...
+func (s *SQLStore) User() UserProvider <span class="cov0" title="0">{
+        return &amp;UserRepository{
+                db: s.db,
+        }
+}</span>
+
+// Order ...
+func (s *SQLStore) Order() OrderProvider <span class="cov0" title="0">{
+        return &amp;OrderRepository{
+                db: s.db,
+        }
+}</span>
+
+// Billing ...
+func (s *SQLStore) Billing() BillingProvider <span class="cov0" title="0">{
+        return &amp;BillingRepository{
+                db: s.db,
+        }
+}</span>
+
+// New ...
+func New(db *sql.DB) *SQLStore <span class="cov0" title="0">{
+        return &amp;SQLStore{
+                db: db,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file28" style="display: none">package postgres
+
+import (
+        "context"
+        "database/sql"
+        "errors"
+
+        "github.com/aube/gophermart/internal/httperrors"
+        "github.com/aube/gophermart/internal/model"
+        "github.com/jackc/pgerrcode"
+        "github.com/jackc/pgx/v5/pgconn"
+)
+
+// UserRepository ...
+type UserRepository struct {
+        db *sql.DB
+}
+
+// Register ...
+func (r *UserRepository) Register(ctx context.Context, u *model.User) error <span class="cov0" title="0">{
+        if err := u.Validate(); err != nil </span><span class="cov0" title="0">{
+                return httperrors.NewValidationError(err)
+        }</span>
+
+        <span class="cov0" title="0">if err := u.BeforeCreate(); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">err := r.db.QueryRowContext(
+                ctx,
+                "INSERT INTO users (login, encrypted_password) VALUES ($1, $2) ON CONFLICT (login) DO NOTHING RETURNING id",
+                u.Login,
+                u.EncryptedPassword,
+        ).Scan(&amp;u.ID)
+
+        // проверяем, что ошибка сигнализирует о потенциальном нарушении целостности данных
+        var pgErr *pgconn.PgError
+        if u.ID == 0 || errors.As(err, &amp;pgErr) &amp;&amp; pgerrcode.IsIntegrityConstraintViolation(pgErr.Code) </span><span class="cov0" title="0">{
+                return httperrors.NewConflictError()
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+
+// Login ...
+func (r *UserRepository) Login(ctx context.Context, u *model.User) (*model.User, error) <span class="cov0" title="0">{
+        if err := u.Validate(); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">if err := r.db.QueryRow(
+                "SELECT id, encrypted_password FROM users WHERE login = $1",
+                u.Login,
+        ).Scan(
+                &amp;u.ID,
+                &amp;u.EncryptedPassword,
+        ); err != nil </span><span class="cov0" title="0">{
+                if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                        return nil, httperrors.NewRecordNotFound()
+                }</span>
+
+                <span class="cov0" title="0">return nil, err</span>
+        }
+
+        <span class="cov0" title="0">if !u.ComparePassword(u.Password) </span><span class="cov0" title="0">{
+                return nil, httperrors.NewLoginFailed()
+        }</span>
+
+        <span class="cov0" title="0">return u, nil</span>
+}
+
+// Balance ...
+func (r *UserRepository) Balance(ctx context.Context, u *model.User) error <span class="cov0" title="0">{
+        if err := r.db.QueryRow(
+                "SELECT balance, withdrawn FROM users WHERE id = $1",
+                u.ID,
+        ).Scan(
+                &amp;u.Balance,
+                &amp;u.Withdrawn,
+        ); err != nil </span><span class="cov0" title="0">{
+                if err == sql.ErrNoRows </span><span class="cov0" title="0">{
+                        return httperrors.NewRecordNotFound()
+                }</span>
+
+                <span class="cov0" title="0">return err</span>
+        }
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file29" style="display: none">package store
+
+import (
+        "context"
+        "database/sql"
+        "fmt"
+        "time"
+
+        _ "github.com/lib/pq"
+
+        "github.com/aube/gophermart/internal/model"
+        "github.com/aube/gophermart/internal/store/memory"
+        "github.com/aube/gophermart/internal/store/postgres"
+)
+
+// ActiveUserProvider ...
+type ActiveUserProvider interface {
+        Set(context.Context, *model.User) error
+        Get(context.Context, string) (*model.User, bool)
+}
+
+// OrdersQueueProvider ...
+type OrdersQueueProvider interface {
+        Enqueue(item int)
+        Dequeue() (int, error)
+        IsEmpty() bool
+        Size() int
+}
+
+// BillingProvider ...
+type BillingProvider interface {
+        Withdrawals(context.Context, int) ([]model.Withdraw, error)
+        BalanceWithdraw(context.Context, *model.Withdraw, *model.User) error
+}
+
+// OrderProvider ...
+type OrderProvider interface {
+        Orders(context.Context, int) ([]model.Order, error)
+        UploadOrders(context.Context, *model.Order) error
+        GetNewOrdersID() ([]int, error)
+        SetStatus(int, string) error
+        SetAccrual(int, int) error
+}
+
+// UserProvider ...
+type UserProvider interface {
+        Register(context.Context, *model.User) error
+        Login(context.Context, *model.User) (*model.User, error)
+        Balance(context.Context, *model.User) error
+}
+
+type Store struct {
+        User        UserProvider
+        ActiveUser  ActiveUserProvider
+        Order       OrderProvider
+        Billing     BillingProvider
+        OrdersQueue OrdersQueueProvider
+}
+
+func NewStore(config string) (Store, error) <span class="cov0" title="0">{
+        db, err := NewDB(config)
+        if err != nil </span><span class="cov0" title="0">{
+                return Store{}, err
+        }</span>
+
+        <span class="cov0" title="0">store := Store{
+                User:       postgres.New(db).User(),
+                Order:      postgres.New(db).Order(),
+                Billing:    postgres.New(db).Billing(),
+                ActiveUser: memory.New().ActiveUser(),
+        }
+
+        return store, nil</span>
+}
+
+func NewDB(dsn string) (*sql.DB, error) <span class="cov0" title="0">{
+        db, err := sql.Open("postgres", dsn)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">db.SetConnMaxLifetime(time.Minute * 3)
+        db.SetMaxOpenConns(10)
+        db.SetMaxIdleConns(10)
+
+        if err := db.Ping(); err != nil </span><span class="cov0" title="0">{
+                return nil, err
+        }</span>
+
+        <span class="cov0" title="0">fmt.Println("PostgreSQL database connection established")
+
+        runPostgresMigrations(db)
+
+        return db, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file30" style="display: none">package workerpool
+
+import (
+        "sync"
+)
+
+type WorkDispatcher struct {
+        input chan int
+}
+
+// New creates a new WorkDispatcher with worker pool
+func New(numWorkers int, processor func(int) string) *WorkDispatcher <span class="cov5" title="3">{
+        wd := &amp;WorkDispatcher{
+                input: make(chan int),
+        }
+
+        // Start workers
+        workerChannels := make([]&lt;-chan string, numWorkers)
+        for i := range numWorkers </span><span class="cov7" title="5">{
+                workerChannels[i] = wd.worker(processor)
+        }</span>
+
+        // Start fan-in goroutine
+        <span class="cov5" title="3">output := wd.fanIn(workerChannels...)
+
+        // Start processing results
+        go func() </span><span class="cov5" title="3">{
+                for result := range output </span><span class="cov8" title="6">{
+                        println(result)
+                }</span>
+        }()
+
+        <span class="cov5" title="3">return wd</span>
+}
+
+func (wd *WorkDispatcher) AddWork(item int) <span class="cov8" title="6">{
+        wd.input &lt;- item
+}</span>
+
+func (wd *WorkDispatcher) Close() <span class="cov5" title="3">{
+        close(wd.input)
+}</span>
+
+func (wd *WorkDispatcher) worker(processor func(int) string) &lt;-chan string <span class="cov8" title="6">{
+        output := make(chan string)
+        go func() </span><span class="cov8" title="6">{
+                for n := range wd.input </span><span class="cov9" title="8">{
+                        output &lt;- processor(n)
+                }</span>
+                <span class="cov8" title="6">close(output)</span>
+        }()
+        <span class="cov8" title="6">return output</span>
+}
+
+func (wd *WorkDispatcher) fanIn(channels ...&lt;-chan string) &lt;-chan string <span class="cov6" title="4">{
+        var wg sync.WaitGroup
+        output := make(chan string)
+
+        for _, ch := range channels </span><span class="cov8" title="7">{
+                wg.Add(1)
+                go func(c &lt;-chan string) </span><span class="cov8" title="7">{
+                        for item := range c </span><span class="cov10" title="9">{
+                                output &lt;- item
+                        }</span>
+                        <span class="cov8" title="7">wg.Done()</span>
+                }(ch)
+        }
+
+        <span class="cov6" title="4">go func() </span><span class="cov6" title="4">{
+                wg.Wait()
+                close(output)
+        }</span>()
+
+        <span class="cov6" title="4">return output</span>
+}
+</pre>
+		
+		<pre class="file" id="file31" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: ./internal/api/interfaces.go
+//
+// Generated by this command:
+//
+//        mockgen -source=./internal/api/interfaces.go -destination=./mocks/api/mocks.go
+//
+
+// Package mock_api is a generated GoMock package.
+package mock_api
+
+import (
+        context "context"
+        reflect "reflect"
+
+        model "github.com/aube/gophermart/internal/model"
+        gomock "go.uber.org/mock/gomock"
+)
+
+// MockUserProvider is a mock of UserProvider interface.
+type MockUserProvider struct {
+        ctrl     *gomock.Controller
+        recorder *MockUserProviderMockRecorder
+        isgomock struct{}
+}
+
+// MockUserProviderMockRecorder is the mock recorder for MockUserProvider.
+type MockUserProviderMockRecorder struct {
+        mock *MockUserProvider
+}
+
+// NewMockUserProvider creates a new mock instance.
+func NewMockUserProvider(ctrl *gomock.Controller) *MockUserProvider <span class="cov9" title="8">{
+        mock := &amp;MockUserProvider{ctrl: ctrl}
+        mock.recorder = &amp;MockUserProviderMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockUserProvider) EXPECT() *MockUserProviderMockRecorder <span class="cov7" title="5">{
+        return m.recorder
+}</span>
+
+// Balance mocks base method.
+func (m *MockUserProvider) Balance(arg0 context.Context, arg1 *model.User) error <span class="cov5" title="3">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Balance", arg0, arg1)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// Balance indicates an expected call of Balance.
+func (mr *MockUserProviderMockRecorder) Balance(arg0, arg1 any) *gomock.Call <span class="cov5" title="3">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Balance", reflect.TypeOf((*MockUserProvider)(nil).Balance), arg0, arg1)
+}</span>
+
+// Login mocks base method.
+func (m *MockUserProvider) Login(arg0 context.Context, arg1 *model.User) (*model.User, error) <span class="cov1" title="1">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Login", arg0, arg1)
+        ret0, _ := ret[0].(*model.User)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// Login indicates an expected call of Login.
+func (mr *MockUserProviderMockRecorder) Login(arg0, arg1 any) *gomock.Call <span class="cov1" title="1">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockUserProvider)(nil).Login), arg0, arg1)
+}</span>
+
+// Register mocks base method.
+func (m *MockUserProvider) Register(arg0 context.Context, arg1 *model.User) error <span class="cov1" title="1">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Register", arg0, arg1)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// Register indicates an expected call of Register.
+func (mr *MockUserProviderMockRecorder) Register(arg0, arg1 any) *gomock.Call <span class="cov1" title="1">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockUserProvider)(nil).Register), arg0, arg1)
+}</span>
+
+// MockActiveUserProvider is a mock of ActiveUserProvider interface.
+type MockActiveUserProvider struct {
+        ctrl     *gomock.Controller
+        recorder *MockActiveUserProviderMockRecorder
+        isgomock struct{}
+}
+
+// MockActiveUserProviderMockRecorder is the mock recorder for MockActiveUserProvider.
+type MockActiveUserProviderMockRecorder struct {
+        mock *MockActiveUserProvider
+}
+
+// NewMockActiveUserProvider creates a new mock instance.
+func NewMockActiveUserProvider(ctrl *gomock.Controller) *MockActiveUserProvider <span class="cov6" title="4">{
+        mock := &amp;MockActiveUserProvider{ctrl: ctrl}
+        mock.recorder = &amp;MockActiveUserProviderMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockActiveUserProvider) EXPECT() *MockActiveUserProviderMockRecorder <span class="cov0" title="0">{
+        return m.recorder
+}</span>
+
+// Get mocks base method.
+func (m *MockActiveUserProvider) Get(arg0 context.Context, arg1 string) (*model.User, bool) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Get", arg0, arg1)
+        ret0, _ := ret[0].(*model.User)
+        ret1, _ := ret[1].(bool)
+        return ret0, ret1
+}</span>
+
+// Get indicates an expected call of Get.
+func (mr *MockActiveUserProviderMockRecorder) Get(arg0, arg1 any) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockActiveUserProvider)(nil).Get), arg0, arg1)
+}</span>
+
+// Set mocks base method.
+func (m *MockActiveUserProvider) Set(arg0 context.Context, arg1 *model.User) error <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Set", arg0, arg1)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// Set indicates an expected call of Set.
+func (mr *MockActiveUserProviderMockRecorder) Set(arg0, arg1 any) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockActiveUserProvider)(nil).Set), arg0, arg1)
+}</span>
+
+// MockBillingProvider is a mock of BillingProvider interface.
+type MockBillingProvider struct {
+        ctrl     *gomock.Controller
+        recorder *MockBillingProviderMockRecorder
+        isgomock struct{}
+}
+
+// MockBillingProviderMockRecorder is the mock recorder for MockBillingProvider.
+type MockBillingProviderMockRecorder struct {
+        mock *MockBillingProvider
+}
+
+// NewMockBillingProvider creates a new mock instance.
+func NewMockBillingProvider(ctrl *gomock.Controller) *MockBillingProvider <span class="cov8" title="7">{
+        mock := &amp;MockBillingProvider{ctrl: ctrl}
+        mock.recorder = &amp;MockBillingProviderMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockBillingProvider) EXPECT() *MockBillingProviderMockRecorder <span class="cov8" title="6">{
+        return m.recorder
+}</span>
+
+// BalanceWithdraw mocks base method.
+func (m *MockBillingProvider) BalanceWithdraw(arg0 context.Context, arg1 *model.Withdraw, arg2 *model.User) error <span class="cov3" title="2">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "BalanceWithdraw", arg0, arg1, arg2)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// BalanceWithdraw indicates an expected call of BalanceWithdraw.
+func (mr *MockBillingProviderMockRecorder) BalanceWithdraw(arg0, arg1, arg2 any) *gomock.Call <span class="cov3" title="2">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BalanceWithdraw", reflect.TypeOf((*MockBillingProvider)(nil).BalanceWithdraw), arg0, arg1, arg2)
+}</span>
+
+// Withdrawals mocks base method.
+func (m *MockBillingProvider) Withdrawals(arg0 context.Context, arg1 int) ([]model.Withdraw, error) <span class="cov6" title="4">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Withdrawals", arg0, arg1)
+        ret0, _ := ret[0].([]model.Withdraw)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// Withdrawals indicates an expected call of Withdrawals.
+func (mr *MockBillingProviderMockRecorder) Withdrawals(arg0, arg1 any) *gomock.Call <span class="cov6" title="4">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Withdrawals", reflect.TypeOf((*MockBillingProvider)(nil).Withdrawals), arg0, arg1)
+}</span>
+
+// MockOrderProvider is a mock of OrderProvider interface.
+type MockOrderProvider struct {
+        ctrl     *gomock.Controller
+        recorder *MockOrderProviderMockRecorder
+        isgomock struct{}
+}
+
+// MockOrderProviderMockRecorder is the mock recorder for MockOrderProvider.
+type MockOrderProviderMockRecorder struct {
+        mock *MockOrderProvider
+}
+
+// NewMockOrderProvider creates a new mock instance.
+func NewMockOrderProvider(ctrl *gomock.Controller) *MockOrderProvider <span class="cov10" title="10">{
+        mock := &amp;MockOrderProvider{ctrl: ctrl}
+        mock.recorder = &amp;MockOrderProviderMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockOrderProvider) EXPECT() *MockOrderProviderMockRecorder <span class="cov9" title="8">{
+        return m.recorder
+}</span>
+
+// GetNewOrdersID mocks base method.
+func (m *MockOrderProvider) GetNewOrdersID() ([]int, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "GetNewOrdersID")
+        ret0, _ := ret[0].([]int)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// GetNewOrdersID indicates an expected call of GetNewOrdersID.
+func (mr *MockOrderProviderMockRecorder) GetNewOrdersID() *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetNewOrdersID", reflect.TypeOf((*MockOrderProvider)(nil).GetNewOrdersID))
+}</span>
+
+// Orders mocks base method.
+func (m *MockOrderProvider) Orders(arg0 context.Context, arg1 int) ([]model.Order, error) <span class="cov6" title="4">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Orders", arg0, arg1)
+        ret0, _ := ret[0].([]model.Order)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// Orders indicates an expected call of Orders.
+func (mr *MockOrderProviderMockRecorder) Orders(arg0, arg1 any) *gomock.Call <span class="cov6" title="4">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Orders", reflect.TypeOf((*MockOrderProvider)(nil).Orders), arg0, arg1)
+}</span>
+
+// SetAccrual mocks base method.
+func (m *MockOrderProvider) SetAccrual(arg0, arg1 int) error <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "SetAccrual", arg0, arg1)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// SetAccrual indicates an expected call of SetAccrual.
+func (mr *MockOrderProviderMockRecorder) SetAccrual(arg0, arg1 any) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetAccrual", reflect.TypeOf((*MockOrderProvider)(nil).SetAccrual), arg0, arg1)
+}</span>
+
+// SetStatus mocks base method.
+func (m *MockOrderProvider) SetStatus(arg0 int, arg1 string) error <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "SetStatus", arg0, arg1)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// SetStatus indicates an expected call of SetStatus.
+func (mr *MockOrderProviderMockRecorder) SetStatus(arg0, arg1 any) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetStatus", reflect.TypeOf((*MockOrderProvider)(nil).SetStatus), arg0, arg1)
+}</span>
+
+// UploadOrders mocks base method.
+func (m *MockOrderProvider) UploadOrders(arg0 context.Context, arg1 *model.Order) error <span class="cov6" title="4">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "UploadOrders", arg0, arg1)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// UploadOrders indicates an expected call of UploadOrders.
+func (mr *MockOrderProviderMockRecorder) UploadOrders(arg0, arg1 any) *gomock.Call <span class="cov6" title="4">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UploadOrders", reflect.TypeOf((*MockOrderProvider)(nil).UploadOrders), arg0, arg1)
+}</span>
+
+// MockAccrualService is a mock of AccrualService interface.
+type MockAccrualService struct {
+        ctrl     *gomock.Controller
+        recorder *MockAccrualServiceMockRecorder
+        isgomock struct{}
+}
+
+// MockAccrualServiceMockRecorder is the mock recorder for MockAccrualService.
+type MockAccrualServiceMockRecorder struct {
+        mock *MockAccrualService
+}
+
+// NewMockAccrualService creates a new mock instance.
+func NewMockAccrualService(ctrl *gomock.Controller) *MockAccrualService <span class="cov8" title="6">{
+        mock := &amp;MockAccrualService{ctrl: ctrl}
+        mock.recorder = &amp;MockAccrualServiceMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockAccrualService) EXPECT() *MockAccrualServiceMockRecorder <span class="cov1" title="1">{
+        return m.recorder
+}</span>
+
+// AddWork mocks base method.
+func (m *MockAccrualService) AddWork(arg0 int) <span class="cov1" title="1">{
+        m.ctrl.T.Helper()
+        m.ctrl.Call(m, "AddWork", arg0)
+}</span>
+
+// AddWork indicates an expected call of AddWork.
+func (mr *MockAccrualServiceMockRecorder) AddWork(arg0 any) *gomock.Call <span class="cov1" title="1">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddWork", reflect.TypeOf((*MockAccrualService)(nil).AddWork), arg0)
+}</span>
+</pre>
+		
+		<pre class="file" id="file32" style="display: none">// mocks.go
+package app
+
+import (
+        "github.com/aube/gophermart/internal/api"
+        "github.com/aube/gophermart/internal/store"
+        "github.com/golang/mock/gomock"
+)
+
+// MockStore is a mock of Store interface
+type MockStore struct {
+        ctrl     *gomock.Controller
+        recorder *MockStoreMockRecorder
+}
+
+// MockStoreMockRecorder is the mock recorder for MockStore
+type MockStoreMockRecorder struct {
+        mock *MockStore
+}
+
+// NewMockStore creates a new mock instance
+func NewMockStore(ctrl *gomock.Controller) *MockStore <span class="cov0" title="0">{
+        mock := &amp;MockStore{ctrl: ctrl}
+        mock.recorder = &amp;MockStoreMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockStore) EXPECT() *MockStoreMockRecorder <span class="cov0" title="0">{
+        return m.recorder
+}</span>
+
+// Order provides a mock function with given fields:
+func (m *MockStore) Order() store.OrderProvider <span class="cov0" title="0">{
+        ret := m.ctrl.Call(m, "Order")
+        ret0, _ := ret[0].(store.OrderProvider)
+        return ret0
+}</span>
+
+// ActiveUser provides a mock function with given fields:
+func (m *MockStore) ActiveUser() api.ActiveUserProvider <span class="cov0" title="0">{
+        ret := m.ctrl.Call(m, "ActiveUser")
+        ret0, _ := ret[0].(api.ActiveUserProvider)
+        return ret0
+}</span>
+
+// Billing provides a mock function with given fields:
+func (m *MockStore) Billing() api.BillingProvider <span class="cov0" title="0">{
+        ret := m.ctrl.Call(m, "Billing")
+        ret0, _ := ret[0].(api.BillingProvider)
+        return ret0
+}</span>
+
+// User provides a mock function with given fields:
+func (m *MockStore) User() api.UserProvider <span class="cov0" title="0">{
+        ret := m.ctrl.Call(m, "User")
+        ret0, _ := ret[0].(api.UserProvider)
+        return ret0
+}</span>
+
+// MockOrderProvider is a mock of OrderProvider interface
+type MockOrderProvider struct {
+        ctrl     *gomock.Controller
+        recorder *MockOrderProviderMockRecorder
+}
+
+// MockOrderProviderMockRecorder is the mock recorder for MockOrderProvider
+type MockOrderProviderMockRecorder struct {
+        mock *MockOrderProvider
+}
+
+// NewMockOrderProvider creates a new mock instance
+func NewMockOrderProvider(ctrl *gomock.Controller) *MockOrderProvider <span class="cov0" title="0">{
+        mock := &amp;MockOrderProvider{ctrl: ctrl}
+        mock.recorder = &amp;MockOrderProviderMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockOrderProvider) EXPECT() *MockOrderProviderMockRecorder <span class="cov0" title="0">{
+        return m.recorder
+}</span>
+
+// GetNewOrdersID provides a mock function with given fields:
+func (m *MockOrderProvider) GetNewOrdersID() ([]int, error) <span class="cov0" title="0">{
+        ret := m.ctrl.Call(m, "GetNewOrdersID")
+        ret0, _ := ret[0].([]int)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// MockWorkerPool is a mock of WorkDispatcher interface
+type MockWorkerPool struct {
+        ctrl     *gomock.Controller
+        recorder *MockWorkerPoolMockRecorder
+}
+
+// MockWorkerPoolMockRecorder is the mock recorder for MockWorkerPool
+type MockWorkerPoolMockRecorder struct {
+        mock *MockWorkerPool
+}
+
+// NewMockWorkerPool creates a new mock instance
+func NewMockWorkerPool(ctrl *gomock.Controller) *MockWorkerPool <span class="cov0" title="0">{
+        mock := &amp;MockWorkerPool{ctrl: ctrl}
+        mock.recorder = &amp;MockWorkerPoolMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use
+func (m *MockWorkerPool) EXPECT() *MockWorkerPoolMockRecorder <span class="cov0" title="0">{
+        return m.recorder
+}</span>
+
+// AddWork provides a mock function with given fields: item
+func (m *MockWorkerPool) AddWork(item int) <span class="cov0" title="0">{
+        m.ctrl.Call(m, "AddWork", item)
+}</span>
+
+// Close provides a mock function with given fields:
+func (m *MockWorkerPool) Close() <span class="cov0" title="0">{
+        m.ctrl.Call(m, "Close")
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
