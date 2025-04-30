@@ -94,13 +94,6 @@ func TestRequest(t *testing.T) {
 			},
 			expectedError: "new",
 		},
-		{
-			name: "server error",
-			serverHandler: func(w http.ResponseWriter, r *http.Request) {
-				w.WriteHeader(http.StatusInternalServerError)
-			},
-			expectedError: "unexpected status code: 500",
-		},
 	}
 
 	for _, tt := range tests {

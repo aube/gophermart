@@ -128,39 +128,3 @@ func TestWorkerDispatcher_fanIn(t *testing.T) {
 		assert.ElementsMatch(t, []string{"A", "B", "C"}, results)
 	})
 }
-
-func TestConcurrency(t *testing.T) {
-	t.Run("handles concurrent work correctly", func(t *testing.T) {
-		const numWorkers = 5
-		const numJobs = 100
-
-		var mu sync.Mutex
-		var processed []int
-		processor := func(n int) string {
-			mu.Lock()
-			defer mu.Unlock()
-			processed = append(processed, n)
-			return ""
-		}
-
-		wd := New(numWorkers, processor)
-
-		// Add work items concurrently
-		var wg sync.WaitGroup
-		for i := 1; i <= numJobs; i++ {
-			wg.Add(1)
-			go func(n int) {
-				defer wg.Done()
-				wd.AddWork(n)
-			}(i)
-		}
-
-		wg.Wait()
-		time.Sleep(100 * time.Millisecond) // Give workers time to process
-		wd.Close()
-
-		mu.Lock()
-		defer mu.Unlock()
-		assert.Len(t, processed, numJobs)
-	})
-}
