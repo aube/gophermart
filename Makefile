@@ -4,7 +4,7 @@ auth:
 
 .PHONY: mocks
 mocks:
-	docker run -v "$PWD":/src -w /src vektra/mockery --all
+	mockgen -source=./internal/api/interfaces.go -destination=./mocks/api/mocks.go
 
 .PHONY: test
 test:
@@ -17,7 +17,7 @@ race:
 .PHONY: cover
 cover:
 	go test -v -short -count=1 -race -coverprofile=coverage.out ./...
-	go tool cover -html=coverage.html
+	go tool cover -html=coverage.out -o test-coverage.html
 	rm coverage.out
 
 #.DEFAULT_GOAL := auth

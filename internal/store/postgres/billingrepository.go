@@ -17,6 +17,10 @@ type BillingRepository struct {
 
 // BalanceWithdraw ...
 func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withdraw, u *model.User) error {
+	if err := wd.Validate(); err != nil {
+		return err
+	}
+
 	if u.Balance < wd.Amount {
 		return httperrors.NewNotEnoughMoneyError()
 	}

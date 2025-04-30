@@ -26,7 +26,6 @@ func New(numWorkers int, processor func(int) string) *WorkDispatcher {
 	// Start processing results
 	go func() {
 		for result := range output {
-			// You could add a callback here if needed
 			println(result)
 		}
 	}()

@@ -4,7 +4,6 @@ import (
 	"time"
 
 	validation "github.com/go-ozzo/ozzo-validation"
-	"github.com/go-ozzo/ozzo-validation/is"
 )
 
 // Withdraw ...
@@ -19,8 +18,8 @@ type Withdraw struct {
 func (w *Withdraw) Validate() error {
 	return validation.ValidateStruct(
 		w,
-		validation.Field(&w.OrderID, validation.Required, is.Int),
-		validation.Field(&w.Amount, validation.Required, is.Int),
+		validation.Field(&w.OrderID, validation.Required),
+		validation.Field(&w.Amount, validation.Required),
 	)
 }
 
