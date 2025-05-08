@@ -57,10 +57,6 @@ func (r *BillingRepository) BalanceWithdraw(ctx context.Context, wd *model.Withd
 		u.ID,
 	)
 
-	fmt.Println(wd.Amount)
-	fmt.Println(u.Balance)
-	fmt.Println(u.Withdrawn)
-	fmt.Println(u.ID)
 	if err != nil {
 		tx.Rollback()
 		return httperrors.NewServerError(err)
